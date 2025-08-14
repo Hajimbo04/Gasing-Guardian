@@ -13,6 +13,13 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The force applied when the player jumps.")]
     [SerializeField] private float jumpForce = 10f;
 
+    // --- Fall & Jump Control ---
+    [Header("Fall & Jump Control")]
+    [Tooltip("Multiplier for gravity when the player is falling. Higher values mean a faster fall.")]
+    [SerializeField] private float fallMultiplier = 2.5f;
+    [Tooltip("Multiplier for gravity when the jump button is released early. Creates a variable jump height.")]
+    [SerializeField] private float lowJumpMultiplier = 2f;
+
     // --- Ground Check Variables ---
     [Header("Ground Check")]
     [Tooltip("The transform representing the position to check for ground from.")]
@@ -42,6 +49,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The force applied to the shot projectile.")]
     [SerializeField] private float shootForce = 20f;
 
+    [Tooltip("How long in seconds before a projectile is destroyed.")]
+    [SerializeField] private float projectileLifetime = 5f;
+
 
     // --- Component References ---
     private Rigidbody2D rb;
@@ -64,7 +74,12 @@ public class PlayerController : MonoBehaviour
         // Get horizontal input (A/D keys or Left/Right arrow keys).
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        // Check for jump input.
+        // --- Flipping Character ---
+        // Flip the character sprite based on movement direction.
+        Flip();
+
+        // --- Jump Logic ---
+        // Check for jump input. The player can only jump if they are on the ground.
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
@@ -81,10 +96,6 @@ public class PlayerController : MonoBehaviour
         {
             ShootAttack();
         }
-
-        // --- Flipping Character ---
-        // Flip the character sprite based on movement direction.
-        Flip();
     }
 
     // FixedUpdate is called at a fixed interval and is used for physics calculations.
@@ -96,7 +107,21 @@ public class PlayerController : MonoBehaviour
 
         // --- Movement ---
         // Apply horizontal movement to the Rigidbody.
-        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+
+        // --- Enhanced Fall & Jump Logic ---
+        if (rb.linearVelocity.y < 0)
+        {
+            // If the player is falling, apply the fallMultiplier to make them fall faster.
+            // We multiply by (fallMultiplier - 1) because the base gravity is already applied.
+            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.linearVelocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            // If the player is moving upwards but has released the jump button,
+            // apply the lowJumpMultiplier to cut the jump short.
+            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
     }
 
     // --- Custom Methods ---
@@ -106,6 +131,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Jump()
     {
+        // Reset vertical velocity before jumping to ensure a consistent jump height.
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         // We use Impulse to apply the force instantly.
         rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
     }
@@ -134,11 +161,26 @@ public class PlayerController : MonoBehaviour
         {
             // Create the projectile at the fire point's position and rotation.
             GameObject projectile = Instantiate(throwProjectilePrefab, firePoint.position, firePoint.rotation);
-            // Get the Rigidbody2D of the projectile and apply force.
+
+            Destroy(projectile, projectileLifetime);
+
             Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
+
             if (projectileRb)
             {
-                projectileRb.AddForce(firePoint.right * throwForce, ForceMode2D.Impulse);
+                // Determine the direction based on the isFacingRight flag.
+                Vector2 fireDirection = isFacingRight ? Vector2.right : Vector2.left;
+
+                // If the projectile sprite needs to be flipped to match the direction.
+                if (!isFacingRight)
+                {
+                    Vector3 projectileScale = projectile.transform.localScale;
+                    projectileScale.x *= -1;
+                    projectile.transform.localScale = projectileScale;
+                }
+
+                // Apply force in the correct direction.
+                projectileRb.AddForce(fireDirection * throwForce, ForceMode2D.Impulse);
             }
         }
     }
@@ -152,11 +194,26 @@ public class PlayerController : MonoBehaviour
         {
             // Create the projectile at the fire point's position and rotation.
             GameObject projectile = Instantiate(shootProjectilePrefab, firePoint.position, firePoint.rotation);
-            // Get the Rigidbody2D of the projectile and apply force.
+
+            Destroy(projectile, projectileLifetime);
+
             Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
+
             if (projectileRb)
             {
-                projectileRb.AddForce(firePoint.right * shootForce, ForceMode2D.Impulse);
+                // Determine the direction based on the isFacingRight flag.
+                Vector2 fireDirection = isFacingRight ? Vector2.right : Vector2.left;
+
+                // If the projectile sprite needs to be flipped to match the direction.
+                if (!isFacingRight)
+                {
+                    Vector3 projectileScale = projectile.transform.localScale;
+                    projectileScale.x *= -1;
+                    projectile.transform.localScale = projectileScale;
+                }
+
+                // Apply force in the correct direction.
+                projectileRb.AddForce(fireDirection * shootForce, ForceMode2D.Impulse);
             }
         }
     }
