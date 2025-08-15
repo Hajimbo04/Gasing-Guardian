@@ -17,8 +17,6 @@ public class PlayerController : MonoBehaviour
     [Header("Fall & Jump Control")]
     [Tooltip("Multiplier for gravity when the player is falling. Higher values mean a faster fall.")]
     [SerializeField] private float fallMultiplier = 2.5f;
-    [Tooltip("Multiplier for gravity when the jump button is released early. Creates a variable jump height.")]
-    [SerializeField] private float lowJumpMultiplier = 2f;
 
     // --- Ground Check Variables ---
     [Header("Ground Check")]
@@ -57,6 +55,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private float horizontalInput;
     private bool isFacingRight = true;
+    private Camera mainCam;
+    private Vector2 mousePos;
 
     // --- Unity Methods ---
 
@@ -65,6 +65,8 @@ public class PlayerController : MonoBehaviour
     {
         // Get the Rigidbody2D component attached to this GameObject.
         rb = GetComponent<Rigidbody2D>();
+        // Get the main camera from the scene.
+        mainCam = Camera.main;
     }
 
     // Update is called once per frame.
@@ -74,8 +76,20 @@ public class PlayerController : MonoBehaviour
         // Get horizontal input (A/D keys or Left/Right arrow keys).
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
+        // Get mouse position in world coordinates.
+        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+
+        // --- Aiming Logic ---
+        // Calculate the direction from the fire point to the mouse.
+        Vector2 aimDirection = mousePos - (Vector2)firePoint.position;
+        // Calculate the angle for this direction.
+        float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        // Rotate the fire point to aim at the cursor.
+        firePoint.rotation = Quaternion.Euler(0, 0, aimAngle);
+
+
         // --- Flipping Character ---
-        // Flip the character sprite based on movement direction.
+        // Flip the character sprite to face the mouse cursor.
         Flip();
 
         // --- Jump Logic ---
@@ -109,18 +123,11 @@ public class PlayerController : MonoBehaviour
         // Apply horizontal movement to the Rigidbody.
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
 
-        // --- Enhanced Fall & Jump Logic ---
+        // --- Enhanced Fall Logic ---
         if (rb.linearVelocity.y < 0)
         {
             // If the player is falling, apply the fallMultiplier to make them fall faster.
-            // We multiply by (fallMultiplier - 1) because the base gravity is already applied.
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        }
-        else if (rb.linearVelocity.y > 0 && !Input.GetButton("Jump"))
-        {
-            // If the player is moving upwards but has released the jump button,
-            // apply the lowJumpMultiplier to cut the jump short.
-            rb.linearVelocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
 
@@ -138,11 +145,14 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Flips the player's sprite to face the direction of movement.
+    /// Flips the player's sprite to face the mouse cursor.
     /// </summary>
     private void Flip()
     {
-        if ((isFacingRight && horizontalInput < 0f) || (!isFacingRight && horizontalInput > 0f))
+        // Determine if the mouse is to the left or right of the player.
+        bool isMouseRight = mousePos.x > transform.position.x;
+
+        if ((isFacingRight && !isMouseRight) || (!isFacingRight && isMouseRight))
         {
             isFacingRight = !isFacingRight;
             // Multiply the player's x local scale by -1.
@@ -159,28 +169,16 @@ public class PlayerController : MonoBehaviour
     {
         if (throwProjectilePrefab && firePoint)
         {
-            // Create the projectile at the fire point's position and rotation.
+            // Create the projectile at the fire point's position and with its rotation.
             GameObject projectile = Instantiate(throwProjectilePrefab, firePoint.position, firePoint.rotation);
-
+            // Schedule the projectile to be destroyed after its lifetime expires.
             Destroy(projectile, projectileLifetime);
 
             Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
-
             if (projectileRb)
             {
-                // Determine the direction based on the isFacingRight flag.
-                Vector2 fireDirection = isFacingRight ? Vector2.right : Vector2.left;
-
-                // If the projectile sprite needs to be flipped to match the direction.
-                if (!isFacingRight)
-                {
-                    Vector3 projectileScale = projectile.transform.localScale;
-                    projectileScale.x *= -1;
-                    projectile.transform.localScale = projectileScale;
-                }
-
-                // Apply force in the correct direction.
-                projectileRb.AddForce(fireDirection * throwForce, ForceMode2D.Impulse);
+                // Apply force in the direction the fire point is facing.
+                projectileRb.AddForce(firePoint.right * throwForce, ForceMode2D.Impulse);
             }
         }
     }
@@ -192,28 +190,16 @@ public class PlayerController : MonoBehaviour
     {
         if (shootProjectilePrefab && firePoint)
         {
-            // Create the projectile at the fire point's position and rotation.
+            // Create the projectile at the fire point's position and with its rotation.
             GameObject projectile = Instantiate(shootProjectilePrefab, firePoint.position, firePoint.rotation);
-
+            // Schedule the projectile to be destroyed after its lifetime expires.
             Destroy(projectile, projectileLifetime);
 
             Rigidbody2D projectileRb = projectile.GetComponent<Rigidbody2D>();
-
             if (projectileRb)
             {
-                // Determine the direction based on the isFacingRight flag.
-                Vector2 fireDirection = isFacingRight ? Vector2.right : Vector2.left;
-
-                // If the projectile sprite needs to be flipped to match the direction.
-                if (!isFacingRight)
-                {
-                    Vector3 projectileScale = projectile.transform.localScale;
-                    projectileScale.x *= -1;
-                    projectile.transform.localScale = projectileScale;
-                }
-
-                // Apply force in the correct direction.
-                projectileRb.AddForce(fireDirection * shootForce, ForceMode2D.Impulse);
+                // Apply force in the direction the fire point is facing.
+                projectileRb.AddForce(firePoint.right * shootForce, ForceMode2D.Impulse);
             }
         }
     }
