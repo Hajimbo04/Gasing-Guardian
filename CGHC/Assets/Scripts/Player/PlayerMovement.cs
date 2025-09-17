@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
 	//movement variables
 	private Vector2 _moveVelocity;
-	private bool _isFacingRight;
+	public bool _isFacingRight;
 
 	//collision check variables
 	private RaycastHit2D _groundHit;
