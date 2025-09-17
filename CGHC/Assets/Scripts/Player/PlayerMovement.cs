@@ -10,6 +10,14 @@ public class PlayerMovement : MonoBehaviour
 
 	private Rigidbody2D _rb;
 
+	//gizmos
+	[Header("Gizmos")]
+	public float FacingDirectionGizmoLength = 1.5f;
+
+	[Header("Debug Gizmo")]
+	public bool ShowFacingDirectionRay;
+
+
 	//movement variables
 	private Vector2 _moveVelocity;
 	private bool _isFacingRight;
@@ -55,7 +63,29 @@ public class PlayerMovement : MonoBehaviour
 		CountTimers();
 		JumpChecks();
 
-    }
+		if (ShowFacingDirectionRay)
+		{
+			// Determine the direction based on the _isFacingRight boolean
+			Vector3 direction = _isFacingRight ? transform.right : -transform.right;
+
+			// Draw the ray in the Game view
+			Debug.DrawRay(transform.position, direction * FacingDirectionGizmoLength, Color.magenta);
+		}
+
+	}
+
+	private void OnDrawGizmosSelected()
+	{
+		// Set the color for the Gizmo
+		Gizmos.color = Color.blue;
+
+		// Determine the direction based on the _isFacingRight boolean
+		Vector3 direction = _isFacingRight ? transform.right : -transform.right;
+
+		// Draw the ray from the player's position
+		Gizmos.DrawRay(transform.position, direction * FacingDirectionGizmoLength);
+	}
+
 	private void FixedUpdate()
 	{
 		CollisionChecks();
@@ -106,11 +136,23 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Turn(bool turnRight)
 	{
-		if (turnRight)
+		_isFacingRight = turnRight;
+
+		// Get the current local scale
+		Vector2 localScale = transform.localScale;
+
+		// Flip the x-component of the scale
+		if (_isFacingRight)
 		{
-			_isFacingRight = true;
-			transform.Rotate(0f, 180f, 0f);
+			localScale.x = 1f;
 		}
+		else
+		{
+			localScale.x = -1f;
+		}
+
+		// Apply the new local scale
+		transform.localScale = localScale;
 	}
 
 	#endregion

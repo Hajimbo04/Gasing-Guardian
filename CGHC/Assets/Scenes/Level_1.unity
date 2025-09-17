@@ -922,6 +922,8 @@ MonoBehaviour:
   MoveStats: {fileID: 11400000, guid: 021e726ceae1b364b9a8a6a46c2b2e49, type: 2}
   _feetColl: {fileID: 155089981}
   _bodyColl: {fileID: 681968896}
+  FacingDirectionGizmoLength: 1.5
+  ShowFacingDirectionRay: 1
 --- !u!1 &1186528147
 GameObject:
   m_ObjectHideFlags: 0
