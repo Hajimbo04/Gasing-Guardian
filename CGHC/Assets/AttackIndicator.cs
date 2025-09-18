@@ -21,7 +21,7 @@ public class AttackIndicator : MonoBehaviour
     }
 
     public void Setup(Transform player, Vector2 offset, PlayerMovement playerMovementRef)
-    {
+    {       
         _playerTransform = player;
         _offset = offset;
         _playerMovement = playerMovementRef;
