@@ -1,0 +1,23 @@
+{
+	"identifier": "Level_3",
+	"uniqueIdentifer": "56b09f60-8560-11f0-98c9-0fd658e81512",
+	"x": 0,
+	"y": -928,
+	"width": 1664,
+	"height": 1216,
+	"bgColor": "#696A79",
+	"neighbourLevels": [
+		{
+			"levelIid": "87a4aa30-8560-11f0-a602-a1181655f9e8",
+			"dir": "e"
+		}
+	],
+	"customFields" : {},
+	"layers": [
+		"Ground.png",
+		"Background_3.png",
+		"Background_2.png",
+		"Background.png"
+	],
+	"entities" : {}
+}
