@@ -59,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 	private float _wallClimbTimer;
 	private bool _isWallClinging;
 	private float _wallClingTimer;
+	private float _wallClimbCooldownTimer;
 
 	private void Awake()
 	{
@@ -363,8 +364,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private void WallClimb()
 	{
-		// Check if the player is sliding on a wall and has a horizontal input in the direction of the wall.
-		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)))
+		// Check if the player is sliding on a wall, has horizontal input towards the wall, and the cooldown has passed.
+		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)) && _wallClimbCooldownTimer <= 0)
 		{
 			// If we are not already climbing, start the climb timer.
 			if (!_isWallClimbing)
@@ -382,6 +383,7 @@ public class PlayerMovement : MonoBehaviour
 			else
 			{
 				_isWallClimbing = false;
+				_wallClimbCooldownTimer = 0.5f; // Start the cooldown for 0.5 seconds
 			}
 		}
 		else
@@ -403,6 +405,9 @@ public class PlayerMovement : MonoBehaviour
 				_isFalling = false;
 				_isFastFalling = false;
 				_numberOfJumpsUsed = 0;
+
+				// Reset the wall climb cooldown so the player can immediately climb a new wall.
+				_wallClimbCooldownTimer = 0f;
 
 				// Apply a horizontal and vertical force in the opposite direction of the wall.
 				float jumpDirection = _isFacingRight ? -1f : 1f;
@@ -532,6 +537,11 @@ public class PlayerMovement : MonoBehaviour
 			_coyoteTimer = MoveStats.JumpCoyoteTime;
 		}
 
+		// Update the wall climb cooldown timer
+		if (_wallClimbCooldownTimer > 0)
+		{
+			_wallClimbCooldownTimer -= Time.deltaTime;
+		}
 
 	}
 	#endregion
