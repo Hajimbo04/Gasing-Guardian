@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Player Movement")]
-
 public class PlayerMovementStats : ScriptableObject
 {
     [Header("Walk")]
@@ -16,6 +15,7 @@ public class PlayerMovementStats : ScriptableObject
 
     [Header("Grounded/Collision Checks")]
     public LayerMask GroundLayer;
+    public LayerMask WallLayer; // New variable for wall layer
     public float GroundDetectionRayLength = 0.02f;
     public float HeadDetectionRayLength = 0.02f;
     [Range(0f, 1f)] public float HeadWidth = 0.75f;
@@ -53,6 +53,27 @@ public class PlayerMovementStats : ScriptableObject
     public bool DrawRight = true;
     [Range(5, 100)] public int ArcResolution = 20;
     [Range(0, 500)] public int VisualizationSteps = 90;
+
+    [Header("Wall Checks")]
+    [Tooltip("Length of the raycast to detect walls.")]
+    public float WallDetectionRayLength = 0.5f;
+
+    [Header("Wall Climb")]
+    [Tooltip("Speed at which the player can climb a wall.")]
+    public float WallClimbSpeed = 3f;
+
+    [Header("Wall Cling")]
+    [Tooltip("Time in seconds the player can cling to a wall.")]
+    public float WallClingTime = 1f;
+
+    [Header("Wall Jump")]
+    [Tooltip("The horizontal force applied during a wall jump.")]
+    public float WallJumpForce = 15f;
+    [Tooltip("The vertical force applied during a wall jump.")]
+    public float WallJumpVerticalForce = 10f;
+
+    [Header("Wall Climb")]
+    [Range(0f, 3f)] public float WallClimbTimeLimit = 1f;
 
     public float Gravity { get; private set; }
 

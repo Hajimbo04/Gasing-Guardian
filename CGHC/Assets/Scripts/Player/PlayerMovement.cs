@@ -51,6 +51,15 @@ public class PlayerMovement : MonoBehaviour
 	//coyote time vars 
 	private float _coyoteTimer;
 
+	//wall climb and jump variables
+	private RaycastHit2D _wallHit;
+	private RaycastHit2D _wallHitBack;
+	private bool _isWallSliding;
+	private bool _isWallClimbing;
+	private float _wallClimbTimer;
+	private bool _isWallClinging;
+	private float _wallClingTimer;
+
 	private void Awake()
 	{
 		_isFacingRight = true;
@@ -59,9 +68,10 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void Update()
-    {
+	{
 		CountTimers();
 		JumpChecks();
+		WallCling();
 
 		if (ShowFacingDirectionRay)
 		{
@@ -90,8 +100,10 @@ public class PlayerMovement : MonoBehaviour
 	{
 		CollisionChecks();
 		Jump();
+		WallClimb();
+		WallJump();
 
-		if (_isGrounded)
+		if (_isGrounded || _isWallClinging)
 		{
 			Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
 		}
@@ -163,66 +175,66 @@ public class PlayerMovement : MonoBehaviour
 	{
 		//when we press jump
 		if (InputManager.JumpWasPressed)
-        {
+		{
 			_jumpBufferTimer = MoveStats.JumpBufferTime;
 			_jumpReleasedDuringBuffer = false;
-        }
+		}
 
 		//when we release jump
 		if (InputManager.JumpWasReleased)
-        {
+		{
 			if (_jumpBufferTimer > 0f)
-            {
+			{
 				_jumpReleasedDuringBuffer = true;
-            }
+			}
 
 			if (_isJumping && VerticalVelocity > 0f)
-            {
+			{
 				if (_isPastApexThreshold)
-                {
+				{
 					_isPastApexThreshold = false;
-                    _isFastFalling = true;
+					_isFastFalling = true;
 					_fastFallTime = MoveStats.TimeForUpwardsCancel;
 					VerticalVelocity = 0f;
-                }
-				
+				}
+
 				else
-                {
+				{
 					_isFastFalling = true;
 					_fastFallReleaseSpeed = VerticalVelocity;
-                }
-            }
-        }
+				}
+			}
+		}
 
 		//initiate jump with buffer and coyote time
-		if (_jumpBufferTimer > 0f && !_isJumping&& (_isGrounded || _coyoteTimer > 0f))
-        {
+		if (_jumpBufferTimer > 0f && !_isJumping && (_isGrounded || _coyoteTimer > 0f))
+		{
 			InitiateJump(1);
 
 			if (_jumpReleasedDuringBuffer)
-            {
+			{
 				_isFastFalling = true;
 				_fastFallReleaseSpeed = VerticalVelocity;
-            }
-        }
+			}
+		}
 
 		//double jump
 		else if (_jumpBufferTimer > 0f && _isJumping && _numberOfJumpsUsed < MoveStats.NumberOfJumpsAllowed)
-        {
+		{
 			_isFastFalling = false;
 			InitiateJump(1);
-        }
+		}
 
 		//air jump after coyote time lapsed
 		else if (_jumpBufferTimer > 0f && _isFalling && _numberOfJumpsUsed < MoveStats.NumberOfJumpsAllowed - 1)
-        {
+		{
 			InitiateJump(2);
 			_isFastFalling = false;
-        }
+		}
 
 		//landed
 		if ((_isJumping || _isFalling) && _isGrounded && VerticalVelocity <= 0f)
-        {
+		{
 			_isJumping = false;
 			_isFalling = false;
 			_isFastFalling = false;
@@ -231,112 +243,116 @@ public class PlayerMovement : MonoBehaviour
 			_numberOfJumpsUsed = 0;
 
 			VerticalVelocity = Physics2D.gravity.y;
-        }
+		}
 
 	}
 
 	private void InitiateJump(int numberOfJumpsUsed)
-    {
+	{
 		if (!_isJumping)
-        {
+		{
 			_isJumping = true;
 		}
 		_jumpBufferTimer = 0f;
 		_numberOfJumpsUsed += numberOfJumpsUsed;
 		VerticalVelocity = MoveStats.InitialJumpVelocity;
-    }
+	}
 
 	private void Jump()
 	{
 		//apply gravity while jumping
 		if (_isJumping)
-        {
+		{
 			//check for head bump 
 			if (_bumpedHead)
-            {
+			{
 				_isFastFalling = true;
-            }
+			}
 			//gravity on ascending
 			if (VerticalVelocity >= 0f)
-            {
+			{
 				//apex controls
 				_apexPoint = Mathf.InverseLerp(MoveStats.InitialJumpVelocity, 0f, VerticalVelocity);
 
 				if (_apexPoint > MoveStats.ApexThreshold)
-                {
-					if(!_isPastApexThreshold)
-                    {
+				{
+					if (!_isPastApexThreshold)
+					{
 						_isPastApexThreshold = true;
 						_timePastApexThreshold = 0f;
-                    }
+					}
 
 					if (_isPastApexThreshold)
-                    {
+					{
 						_timePastApexThreshold += Time.fixedDeltaTime;
 						if (_timePastApexThreshold < MoveStats.ApexHangTime)
-                        {
+						{
 							VerticalVelocity = 0f;
-                        }
-						
+						}
+
 						else
-                        {
+						{
 							VerticalVelocity = -0.01f;
-                        }
-                    }
-                }
+						}
+					}
+				}
 
 				//gravity on descending but not past apex
 				else
-                {
+				{
 					VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
 					if (_isPastApexThreshold)
-                    {
+					{
 						_isPastApexThreshold = false;
-                    }
-                }
+					}
+				}
 			}
 
 			//gravity on descending
 			else if (!_isFastFalling)
-            {
+			{
 				VerticalVelocity += MoveStats.Gravity * MoveStats.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
-            }
+			}
 
 			else if (VerticalVelocity < 0f)
-            {
+			{
 				if (!_isFalling)
-                {
+				{
 					_isFalling = true;
-                }
-            }
+				}
+			}
 
 		}
-		
+
 		//jump cut
 		if (_isFastFalling)
-            {
+		{
 			if (_fastFallTime >= MoveStats.TimeForUpwardsCancel)
-            {
+			{
 				VerticalVelocity += MoveStats.Gravity * MoveStats.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
-            }
+			}
 
 			else if (_fastFallTime < MoveStats.TimeForUpwardsCancel)
-            {
+			{
 				VerticalVelocity = Mathf.Lerp(_fastFallReleaseSpeed, 0f, (_fastFallTime / MoveStats.TimeForUpwardsCancel));
-            }
+			}
 
 			_fastFallTime += Time.fixedDeltaTime;
-        }
+		}
 
 		//normal gravity while falling
-		if (!_isGrounded && !_isJumping)
-        {
+		if (!_isGrounded && !_isJumping && !_isWallClimbing && !_isWallClinging)
+		{
 			if (!_isFalling)
-            {
+			{
 				_isFalling = true;
-            }
+			}
 			VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
-        }
+		}
+		else if (_isWallClimbing || _isWallClinging)
+		{
+			VerticalVelocity = 0f;
+		}
 
 		//clamp fall speed
 		VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
@@ -344,11 +360,91 @@ public class PlayerMovement : MonoBehaviour
 		_rb.linearVelocity = new Vector2(_rb.linearVelocity.x, VerticalVelocity);
 	}
 
+	private void WallClimb()
+	{
+		// Check if the player is sliding on a wall and has a horizontal input in the direction of the wall.
+		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)))
+		{
+			// If we are not already climbing, start the climb timer.
+			if (!_isWallClimbing)
+			{
+				_isWallClimbing = true;
+				_wallClimbTimer = MoveStats.WallClimbTimeLimit;
+			}
+
+			// If the timer is still active, continue climbing.
+			if (_wallClimbTimer > 0)
+			{
+				_rb.linearVelocity = new Vector2(_rb.linearVelocity.x, MoveStats.WallClimbSpeed);
+				_wallClimbTimer -= Time.fixedDeltaTime;
+			}
+			else
+			{
+				_isWallClimbing = false;
+			}
+		}
+		else
+		{
+			_isWallClimbing = false;
+		}
+	}
+
+	private void WallJump()
+	{
+		// Only allow a wall jump if the player is wall sliding.
+		if ((_isWallSliding || _isWallClinging) && InputManager.JumpWasPressed)
+		{
+			// Check if the player is moving into the wall.
+			if ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0))
+			{
+				// Reset jump states.
+				_isJumping = true;
+				_isFalling = false;
+				_isFastFalling = false;
+				_numberOfJumpsUsed = 0;
+
+				// Apply a horizontal and vertical force in the opposite direction of the wall.
+				float jumpDirection = _isFacingRight ? -1f : 1f;
+				_rb.linearVelocity = new Vector2(MoveStats.WallJumpForce * jumpDirection, MoveStats.WallJumpVerticalForce);
+			}
+		}
+	}
+
+	private void WallCling()
+	{
+		// Check if the player is wall sliding and pressing the movement key towards the wall.
+		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)))
+		{
+			// Start the cling timer if it's the first frame of the cling.
+			if (!_isWallClinging)
+			{
+				_isWallClinging = true;
+				_wallClingTimer = MoveStats.WallClingTime;
+			}
+
+			// Decrease the timer while clinging.
+			if (_wallClingTimer > 0)
+			{
+				_wallClingTimer -= Time.deltaTime;
+			}
+
+			// If the timer runs out, or the player moves off the wall, stop clinging.
+			if (_wallClingTimer <= 0 || _wallHitBack.collider == null)
+			{
+				_isWallClinging = false;
+			}
+		}
+		else
+		{
+			_isWallClinging = false;
+		}
+	}
+
 	#endregion
 
 	#region Collision Checks 
 
-	private void IsGrounded() 
+	private void IsGrounded()
 	{
 		Vector2 boxcastOrigin = new Vector2(_feetColl.bounds.center.x, _feetColl.bounds.min.y);
 		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x, MoveStats.GroundDetectionRayLength);
@@ -365,29 +461,56 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void BumpedHead()
-    {
+	{
 		Vector2 boxCastOrigin = new Vector2(_feetColl.bounds.center.x, _bodyColl.bounds.max.y);
 		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x * MoveStats.HeadWidth, MoveStats.HeadDetectionRayLength);
 
 		_headHit = Physics2D.BoxCast(boxCastOrigin, boxCastSize, 0f, Vector2.up, MoveStats.HeadDetectionRayLength, MoveStats.GroundLayer);
-		if(_headHit.collider != null)
-        {
+		if (_headHit.collider != null)
+		{
 			_bumpedHead = true;
-        }
+		}
 
 		else
-        {
+		{
 			_bumpedHead = false;
-        }
-    }
+		}
+	}
 
+	private void WallCheck()
+	{
+		// Determine the direction to cast the ray based on which way the player is facing.
+		Vector2 castDirection = _isFacingRight ? Vector2.right : Vector2.left;
+
+		// Raycast forward to detect a wall.
+		_wallHit = Physics2D.Raycast(transform.position, castDirection, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
+
+		// Determine the opposite direction for the back raycast.
+		Vector2 backCastDirection = _isFacingRight ? Vector2.left : Vector2.right;
+
+		// Raycast backward to detect if the player has moved off the wall.
+		_wallHitBack = Physics2D.Raycast(transform.position, backCastDirection, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
+
+		// If we've hit a wall and are not grounded, we are wall sliding.
+		if (_wallHit.collider != null && !_isGrounded)
+		{
+			_isWallSliding = true;
+			// Reset the number of jumps when the player starts sliding on a wall.
+			_numberOfJumpsUsed = 0;
+		}
+		else
+		{
+			_isWallSliding = false;
+		}
+	}
 
 
 	private void CollisionChecks()
 	{
 		IsGrounded();
 		BumpedHead();
-	}	
+		WallCheck();
+	}
 
 	#endregion
 
@@ -406,7 +529,7 @@ public class PlayerMovement : MonoBehaviour
 			_coyoteTimer = MoveStats.JumpCoyoteTime;
 		}
 
-	
+
 	}
 	#endregion
 }
