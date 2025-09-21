@@ -340,7 +340,7 @@ public class PlayerMovement : MonoBehaviour
 			_fastFallTime += Time.fixedDeltaTime;
 		}
 
-		//normal gravity while falling
+		//normal gravity while falling, but only if not climbing or clinging.
 		if (!_isGrounded && !_isJumping && !_isWallClimbing && !_isWallClinging)
 		{
 			if (!_isFalling)
@@ -351,6 +351,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (_isWallClimbing || _isWallClinging)
 		{
+			// When wall climbing or clinging, set vertical velocity to 0 to prevent falling.
 			VerticalVelocity = 0f;
 		}
 
@@ -501,6 +502,8 @@ public class PlayerMovement : MonoBehaviour
 		else
 		{
 			_isWallSliding = false;
+			_isWallClimbing = false;
+			_isWallClinging = false;
 		}
 	}
 
