@@ -44,12 +44,12 @@ public class PlayerMovementStats : ScriptableObject
 
     [Header("Wall")]
     public LayerMask WallLayer;
-    [Range(0f, 3f)] public float WallClimbTimeLimit = 1f;
     public float WallDetectionRayLength = 0.5f;
     public float WallClimbSpeed = 3f;
     public float WallClingTime = 1f;
     public float WallJumpForce = 15f;
     public float WallJumpVerticalForce = 10f;
+    [Range(0f, 3f)] public float WallClimbTimeLimit = 1f;
 
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;
