@@ -17,6 +17,15 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Debug Gizmo")]
 	public bool ShowFacingDirectionRay;
 
+		// Dash variables
+		[Header("Dash")]
+		public float DashSpeed = 20f;
+		public float DashDuration = 0.2f;
+		public float DashCooldown = 0.5f;
+		private bool _isDashing;
+		private float _dashTimer;
+		private float _dashCooldownTimer;
+		private int _dashDirection; // 1 for right, -1 for left
 
 	//movement variables
 	private Vector2 _moveVelocity;
@@ -74,6 +83,23 @@ public class PlayerMovement : MonoBehaviour
 		JumpChecks();
 		WallCling();
 
+			// Dash input and logic
+			if (!_isDashing && _dashCooldownTimer <= 0)
+			{
+				// Dash on pressing F
+				if (Input.GetKeyDown(KeyCode.F))
+				{
+					// Only dash if moving left/right
+					if (InputManager.Movement.x != 0)
+					{
+						_isDashing = true;
+						_dashTimer = DashDuration;
+						_dashCooldownTimer = DashCooldown + DashDuration;
+						_dashDirection = InputManager.Movement.x > 0 ? 1 : -1;
+					}
+				}
+			}
+
 		if (ShowFacingDirectionRay)
 		{
 			// Determine the direction based on the _isFacingRight boolean
@@ -104,14 +130,27 @@ public class PlayerMovement : MonoBehaviour
 		WallClimb();
 		WallJump();
 
-		if (_isGrounded || _isWallClinging)
+		if (_isDashing)
 		{
-			Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
-		}
-		else
-		{
-			Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
-		}
+				// Apply dash velocity
+				_rb.linearVelocity = new Vector2(_dashDirection * DashSpeed, 0f);
+				_dashTimer -= Time.fixedDeltaTime;
+				if (_dashTimer <= 0)
+				{
+					_isDashing = false;
+				}
+			}
+			else
+			{
+				if (_isGrounded || _isWallClinging)
+				{
+					Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
+				}
+				else
+				{
+					Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
+				}
+			}
 	}
 
 	#region Movement
@@ -542,6 +581,12 @@ public class PlayerMovement : MonoBehaviour
 		{
 			_wallClimbCooldownTimer -= Time.deltaTime;
 		}
+
+	        // Dash cooldown timer
+	        if (_dashCooldownTimer > 0)
+	        {
+	            _dashCooldownTimer -= Time.deltaTime;
+	        }
 
 	}
 	#endregion
