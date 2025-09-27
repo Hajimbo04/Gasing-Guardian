@@ -4,41 +4,55 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	[Header("References")] public PlayerMovementStats MoveStats;
+	// ────────────────────────────────
+	// References
+	// ────────────────────────────────
+	[Header("References")]
+	public PlayerMovementStats MoveStats;
 	[SerializeField] private Collider2D _feetColl;
 	[SerializeField] private Collider2D _bodyColl;
+	[SerializeField] private Animator _animator;
 
 	private Rigidbody2D _rb;
 
-	//gizmos
+	// ────────────────────────────────
+	// Gizmos
+	// ────────────────────────────────
 	[Header("Gizmos")]
 	public float FacingDirectionGizmoLength = 1.5f;
-
 	[Header("Debug Gizmo")]
 	public bool ShowFacingDirectionRay;
 
-		// Dash variables
-		[Header("Dash")]
-		public float DashSpeed = 20f;
-		public float DashDuration = 0.2f;
-		public float DashCooldown = 0.5f;
-		private bool _isDashing;
-		private float _dashTimer;
-		private float _dashCooldownTimer;
-		private int _dashDirection; // 1 for right, -1 for left
+	// ────────────────────────────────
+	// Dash Variables
+	// ────────────────────────────────
+	[Header("Dash")]
+	public float DashSpeed = 20f;
+	public float DashDuration = 0.2f;
+	public float DashCooldown = 0.5f;
 
-	//movement variables
+	private bool _isDashing;
+	private float _dashTimer;
+	private float _dashCooldownTimer;
+	private int _dashDirection; // 1 = right, -1 = left
+
+	// ────────────────────────────────
+	// Movement Variables
+	// ────────────────────────────────
 	private Vector2 _moveVelocity;
 	public bool _isFacingRight;
 
-	//collision check variables
+	// ────────────────────────────────
+	// Collision Checks
+	// ────────────────────────────────
 	private RaycastHit2D _groundHit;
 	private RaycastHit2D _headHit;
 	private bool _isGrounded;
 	private bool _bumpedHead;
 
-
-	//jump vars
+	// ────────────────────────────────
+	// Jump Variables
+	// ────────────────────────────────
 	public float VerticalVelocity { get; private set; }
 	private bool _isJumping;
 	private bool _isFastFalling;
@@ -48,19 +62,21 @@ public class PlayerMovement : MonoBehaviour
 	private float _fastFallReleaseSpeed;
 	private int _numberOfJumpsUsed;
 
-	//apex vars
+	// Apex
 	private float _apexPoint;
 	private float _timePastApexThreshold;
 	private bool _isPastApexThreshold;
 
-	//jump buffer vars
+	// Jump buffer
 	private float _jumpBufferTimer;
 	private bool _jumpReleasedDuringBuffer;
 
-	//coyote time vars 
+	// Coyote time
 	private float _coyoteTimer;
 
-	//wall climb and jump variables
+	// ────────────────────────────────
+	// Wall Actions
+	// ────────────────────────────────
 	private RaycastHit2D _wallHit;
 	private RaycastHit2D _wallHitBack;
 	private bool _isWallSliding;
@@ -70,10 +86,12 @@ public class PlayerMovement : MonoBehaviour
 	private float _wallClingTimer;
 	private float _wallClimbCooldownTimer;
 
+	// ────────────────────────────────
+	// Unity Methods
+	// ────────────────────────────────
 	private void Awake()
 	{
 		_isFacingRight = true;
-
 		_rb = GetComponent<Rigidbody2D>();
 	}
 
@@ -82,45 +100,14 @@ public class PlayerMovement : MonoBehaviour
 		CountTimers();
 		JumpChecks();
 		WallCling();
-
-			// Dash input and logic
-			if (!_isDashing && _dashCooldownTimer <= 0)
-			{
-				// Dash on pressing F
-				if (Input.GetKeyDown(KeyCode.F))
-				{
-					// Only dash if moving left/right
-					if (InputManager.Movement.x != 0)
-					{
-						_isDashing = true;
-						_dashTimer = DashDuration;
-						_dashCooldownTimer = DashCooldown + DashDuration;
-						_dashDirection = InputManager.Movement.x > 0 ? 1 : -1;
-					}
-				}
-			}
+		HandleDashInput();
+		HandleAnimations();
 
 		if (ShowFacingDirectionRay)
 		{
-			// Determine the direction based on the _isFacingRight boolean
 			Vector3 direction = _isFacingRight ? transform.right : -transform.right;
-
-			// Draw the ray in the Game view
 			Debug.DrawRay(transform.position, direction * FacingDirectionGizmoLength, Color.magenta);
 		}
-
-	}
-
-	private void OnDrawGizmosSelected()
-	{
-		// Set the color for the Gizmo
-		Gizmos.color = Color.blue;
-
-		// Determine the direction based on the _isFacingRight boolean
-		Vector3 direction = _isFacingRight ? transform.right : -transform.right;
-
-		// Draw the ray from the player's position
-		Gizmos.DrawRay(transform.position, direction * FacingDirectionGizmoLength);
 	}
 
 	private void FixedUpdate()
@@ -132,125 +119,139 @@ public class PlayerMovement : MonoBehaviour
 
 		if (_isDashing)
 		{
-				// Apply dash velocity
-				_rb.linearVelocity = new Vector2(_dashDirection * DashSpeed, 0f);
-				_dashTimer -= Time.fixedDeltaTime;
-				if (_dashTimer <= 0)
-				{
-					_isDashing = false;
-				}
-			}
+			HandleDashMovement();
+		}
+		else
+		{
+			if (_isGrounded || _isWallClinging)
+				Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
 			else
-			{
-				if (_isGrounded || _isWallClinging)
-				{
-					Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
-				}
-				else
-				{
-					Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
-				}
-			}
+				Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
+		}
+	}
+
+	private void OnDrawGizmosSelected()
+	{
+		Gizmos.color = Color.blue;
+		Vector3 direction = _isFacingRight ? transform.right : -transform.right;
+		Gizmos.DrawRay(transform.position, direction * FacingDirectionGizmoLength);
 	}
 
 	#region Movement
+	// ────────────────────────────────
+	// Input Handlers
+	// ────────────────────────────────
+	private void HandleDashInput()
+	{
+		if (!_isDashing && _dashCooldownTimer <= 0 && Input.GetKeyDown(KeyCode.F))
+		{
+			if (InputManager.Movement.x != 0)
+			{
+				_isDashing = true;
+				_dashTimer = DashDuration;
+				_dashCooldownTimer = DashCooldown + DashDuration;
+				_dashDirection = InputManager.Movement.x > 0 ? 1 : -1;
+			}
+		}
+	}
 
+	private void HandleAnimations()
+	{
+		// Running
+		if (InputManager.Movement.x != 0 && _isGrounded && !_isDashing)
+			_animator.SetBool("isWalking", true);
+		else
+			_animator.SetBool("isWalking", false);
+	}
+
+	// ────────────────────────────────
+	// Movement
+	// ────────────────────────────────
 	private void Move(float acceleration, float deceleration, Vector2 moveInput)
 	{
 		if (moveInput != Vector2.zero)
 		{
 			TurnCheck(moveInput);
-
 			Vector2 targetVelocity = new Vector2(moveInput.x, 0f) * MoveStats.MaxWalkSpeed;
-
 			_moveVelocity = Vector2.Lerp(_moveVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
-			_rb.linearVelocity = new Vector2(_moveVelocity.x, _rb.linearVelocity.y);
 		}
-		else if (moveInput == Vector2.zero)
+		else
 		{
 			_moveVelocity = Vector2.Lerp(_moveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
-			_rb.linearVelocity = new Vector2(_moveVelocity.x, _rb.linearVelocity.y);
 		}
+
+		_rb.linearVelocity = new Vector2(_moveVelocity.x, _rb.linearVelocity.y);
 	}
 
 	private void TurnCheck(Vector2 moveInput)
 	{
-		if (_isFacingRight && moveInput.x < 0)
-		{
-			Turn(false);
-		}
-
-		else if (!_isFacingRight && moveInput.x > 0)
-		{
-			Turn(true);
-		}
+		if (_isFacingRight && moveInput.x < 0) Turn(false);
+		else if (!_isFacingRight && moveInput.x > 0) Turn(true);
 	}
 
 	private void Turn(bool turnRight)
 	{
 		_isFacingRight = turnRight;
-
-		// Get the current local scale
 		Vector2 localScale = transform.localScale;
-
-		// Flip the x-component of the scale
-		if (_isFacingRight)
-		{
-			localScale.x = 1f;
-		}
-		else
-		{
-			localScale.x = -1f;
-		}
-
-		// Apply the new local scale
+		localScale.x = _isFacingRight ? 1f : -1f;
 		transform.localScale = localScale;
+	}
+
+	private void HandleDashMovement()
+	{
+		_rb.linearVelocity = new Vector2(_dashDirection * DashSpeed, 0f);
+		_dashTimer -= Time.fixedDeltaTime;
+		if (_dashTimer <= 0) _isDashing = false;
 	}
 
 	#endregion
 
+	// ────────────────────────────────
+	// Jump
+	// ────────────────────────────────
 	#region Jump
 
+	// ────────────────────────────────
+	// Jump Input & State Checks
+	// ────────────────────────────────
 	private void JumpChecks()
 	{
-		//when we press jump
+		// Jump pressed → start buffer
 		if (InputManager.JumpWasPressed)
 		{
 			_jumpBufferTimer = MoveStats.JumpBufferTime;
 			_jumpReleasedDuringBuffer = false;
 		}
 
-		//when we release jump
+		// Jump released → handle variable height / fast fall
 		if (InputManager.JumpWasReleased)
 		{
 			if (_jumpBufferTimer > 0f)
-			{
 				_jumpReleasedDuringBuffer = true;
-			}
 
 			if (_isJumping && VerticalVelocity > 0f)
 			{
 				if (_isPastApexThreshold)
 				{
+					// Cut jump after apex
 					_isPastApexThreshold = false;
 					_isFastFalling = true;
 					_fastFallTime = MoveStats.TimeForUpwardsCancel;
 					VerticalVelocity = 0f;
 				}
-
 				else
 				{
+					// Cut jump mid-air
 					_isFastFalling = true;
 					_fastFallReleaseSpeed = VerticalVelocity;
 				}
 			}
 		}
 
-		//initiate jump with buffer and coyote time
+		// Jump buffer + coyote time
 		if (_jumpBufferTimer > 0f && !_isJumping && (_isGrounded || _coyoteTimer > 0f))
 		{
 			InitiateJump(1);
-
 			if (_jumpReleasedDuringBuffer)
 			{
 				_isFastFalling = true;
@@ -258,21 +259,21 @@ public class PlayerMovement : MonoBehaviour
 			}
 		}
 
-		//double jump
+		// Double jump
 		else if (_jumpBufferTimer > 0f && _isJumping && _numberOfJumpsUsed < MoveStats.NumberOfJumpsAllowed)
 		{
 			_isFastFalling = false;
 			InitiateJump(1);
 		}
 
-		//air jump after coyote time lapsed
+		// Air jump after coyote expired
 		else if (_jumpBufferTimer > 0f && _isFalling && _numberOfJumpsUsed < MoveStats.NumberOfJumpsAllowed - 1)
 		{
 			InitiateJump(2);
 			_isFastFalling = false;
 		}
 
-		//landed
+		// Landing
 		if ((_isJumping || _isFalling) && _isGrounded && VerticalVelocity <= 0f)
 		{
 			_isJumping = false;
@@ -284,15 +285,15 @@ public class PlayerMovement : MonoBehaviour
 
 			VerticalVelocity = Physics2D.gravity.y;
 		}
-
 	}
 
+	// ────────────────────────────────
+	// Apply Jump Forces
+	// ────────────────────────────────
 	private void InitiateJump(int numberOfJumpsUsed)
 	{
-		if (!_isJumping)
-		{
-			_isJumping = true;
-		}
+		if (!_isJumping) _isJumping = true;
+
 		_jumpBufferTimer = 0f;
 		_numberOfJumpsUsed += numberOfJumpsUsed;
 		VerticalVelocity = MoveStats.InitialJumpVelocity;
@@ -300,120 +301,108 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Jump()
 	{
-		//apply gravity while jumping
+		// Jumping upward
 		if (_isJumping)
 		{
-			//check for head bump 
+			// Bumped head → force fall
 			if (_bumpedHead)
-			{
 				_isFastFalling = true;
-			}
-			//gravity on ascending
+
+			// Ascending
 			if (VerticalVelocity >= 0f)
 			{
-				//apex controls
-				_apexPoint = Mathf.InverseLerp(MoveStats.InitialJumpVelocity, 0f, VerticalVelocity);
-
-				if (_apexPoint > MoveStats.ApexThreshold)
-				{
-					if (!_isPastApexThreshold)
-					{
-						_isPastApexThreshold = true;
-						_timePastApexThreshold = 0f;
-					}
-
-					if (_isPastApexThreshold)
-					{
-						_timePastApexThreshold += Time.fixedDeltaTime;
-						if (_timePastApexThreshold < MoveStats.ApexHangTime)
-						{
-							VerticalVelocity = 0f;
-						}
-
-						else
-						{
-							VerticalVelocity = -0.01f;
-						}
-					}
-				}
-
-				//gravity on descending but not past apex
-				else
-				{
-					VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
-					if (_isPastApexThreshold)
-					{
-						_isPastApexThreshold = false;
-					}
-				}
+				HandleApexLogic();
 			}
-
-			//gravity on descending
+			// Descending
 			else if (!_isFastFalling)
 			{
 				VerticalVelocity += MoveStats.Gravity * MoveStats.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
 			}
-
-			else if (VerticalVelocity < 0f)
+			else if (VerticalVelocity < 0f && !_isFalling)
 			{
-				if (!_isFalling)
-				{
-					_isFalling = true;
-				}
+				_isFalling = true;
 			}
-
 		}
 
-		//jump cut
+		// Fast fall (jump cut)
 		if (_isFastFalling)
 		{
 			if (_fastFallTime >= MoveStats.TimeForUpwardsCancel)
 			{
 				VerticalVelocity += MoveStats.Gravity * MoveStats.GravityOnReleaseMultiplier * Time.fixedDeltaTime;
 			}
-
-			else if (_fastFallTime < MoveStats.TimeForUpwardsCancel)
+			else
 			{
-				VerticalVelocity = Mathf.Lerp(_fastFallReleaseSpeed, 0f, (_fastFallTime / MoveStats.TimeForUpwardsCancel));
+				VerticalVelocity = Mathf.Lerp(_fastFallReleaseSpeed, 0f, _fastFallTime / MoveStats.TimeForUpwardsCancel);
 			}
 
 			_fastFallTime += Time.fixedDeltaTime;
 		}
 
-		//normal gravity while falling, but only if not climbing or clinging.
+		// Apply normal gravity while falling
 		if (!_isGrounded && !_isJumping && !_isWallClimbing && !_isWallClinging)
 		{
-			if (!_isFalling)
-			{
-				_isFalling = true;
-			}
+			if (!_isFalling) _isFalling = true;
 			VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
 		}
+		// Cancel gravity while clinging/climbing
 		else if (_isWallClimbing || _isWallClinging)
 		{
-			// When wall climbing or clinging, set vertical velocity to 0 to prevent falling.
 			VerticalVelocity = 0f;
 		}
 
-		//clamp fall speed
+		// Clamp fall speed
 		VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
 
 		_rb.linearVelocity = new Vector2(_rb.linearVelocity.x, VerticalVelocity);
 	}
 
+	// ────────────────────────────────
+	// Handle Apex Hang Time
+	// ────────────────────────────────
+	private void HandleApexLogic()
+	{
+		_apexPoint = Mathf.InverseLerp(MoveStats.InitialJumpVelocity, 0f, VerticalVelocity);
+
+		if (_apexPoint > MoveStats.ApexThreshold)
+		{
+			if (!_isPastApexThreshold)
+			{
+				_isPastApexThreshold = true;
+				_timePastApexThreshold = 0f;
+			}
+
+			_timePastApexThreshold += Time.fixedDeltaTime;
+
+			if (_timePastApexThreshold < MoveStats.ApexHangTime)
+				VerticalVelocity = 0f;
+			else
+				VerticalVelocity = -0.01f;
+		}
+		else
+		{
+			VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
+			if (_isPastApexThreshold) _isPastApexThreshold = false;
+		}
+	}
+
+	#endregion
+
+
+	#region Wall Actions
+
 	private void WallClimb()
 	{
-		// Check if the player is sliding on a wall, has horizontal input towards the wall, and the cooldown has passed.
-		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)) && _wallClimbCooldownTimer <= 0)
+		bool climbingInput = (_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0);
+
+		if (_isWallSliding && climbingInput && _wallClimbCooldownTimer <= 0)
 		{
-			// If we are not already climbing, start the climb timer.
 			if (!_isWallClimbing)
 			{
 				_isWallClimbing = true;
 				_wallClimbTimer = MoveStats.WallClimbTimeLimit;
 			}
 
-			// If the timer is still active, continue climbing.
 			if (_wallClimbTimer > 0)
 			{
 				_rb.linearVelocity = new Vector2(_rb.linearVelocity.x, MoveStats.WallClimbSpeed);
@@ -422,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
 			else
 			{
 				_isWallClimbing = false;
-				_wallClimbCooldownTimer = 0.5f; // Start the cooldown for 0.5 seconds
+				_wallClimbCooldownTimer = 0.5f; // short cooldown
 			}
 		}
 		else
@@ -433,22 +422,20 @@ public class PlayerMovement : MonoBehaviour
 
 	private void WallJump()
 	{
-		// Only allow a wall jump if the player is wall sliding.
 		if ((_isWallSliding || _isWallClinging) && InputManager.JumpWasPressed)
 		{
-			// Check if the player is moving into the wall.
-			if ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0))
+			bool jumpingIntoWall = (_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0);
+
+			if (jumpingIntoWall)
 			{
-				// Reset jump states.
+				// Reset states
 				_isJumping = true;
 				_isFalling = false;
 				_isFastFalling = false;
 				_numberOfJumpsUsed = 0;
-
-				// Reset the wall climb cooldown so the player can immediately climb a new wall.
 				_wallClimbCooldownTimer = 0f;
 
-				// Apply a horizontal and vertical force in the opposite direction of the wall.
+				// Jump away from wall
 				float jumpDirection = _isFacingRight ? -1f : 1f;
 				_rb.linearVelocity = new Vector2(MoveStats.WallJumpForce * jumpDirection, MoveStats.WallJumpVerticalForce);
 			}
@@ -457,23 +444,21 @@ public class PlayerMovement : MonoBehaviour
 
 	private void WallCling()
 	{
-		// Check if the player is wall sliding and pressing the movement key towards the wall.
-		if (_isWallSliding && ((_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0)))
+		bool clingingInput = (_isFacingRight && InputManager.Movement.x > 0) || (!_isFacingRight && InputManager.Movement.x < 0);
+
+		if (_isWallSliding && clingingInput)
 		{
-			// Start the cling timer if it's the first frame of the cling.
 			if (!_isWallClinging)
 			{
 				_isWallClinging = true;
 				_wallClingTimer = MoveStats.WallClingTime;
 			}
 
-			// Decrease the timer while clinging.
 			if (_wallClingTimer > 0)
 			{
 				_wallClingTimer -= Time.deltaTime;
 			}
 
-			// If the timer runs out, or the player moves off the wall, stop clinging.
 			if (_wallClingTimer <= 0 || _wallHitBack.collider == null)
 			{
 				_isWallClinging = false;
@@ -487,61 +472,39 @@ public class PlayerMovement : MonoBehaviour
 
 	#endregion
 
-	#region Collision Checks 
+
+	#region Collision Checks
 
 	private void IsGrounded()
 	{
-		Vector2 boxcastOrigin = new Vector2(_feetColl.bounds.center.x, _feetColl.bounds.min.y);
-		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x, MoveStats.GroundDetectionRayLength);
+		Vector2 origin = new Vector2(_feetColl.bounds.center.x, _feetColl.bounds.min.y);
+		Vector2 size = new Vector2(_feetColl.bounds.size.x, MoveStats.GroundDetectionRayLength);
 
-		_groundHit = Physics2D.BoxCast(boxcastOrigin, boxCastSize, 0f, Vector2.down, MoveStats.GroundDetectionRayLength, MoveStats.GroundLayer);
-		if (_groundHit.collider != null)
-		{
-			_isGrounded = true;
-		}
-		else
-		{
-			_isGrounded = false;
-		}
+		_groundHit = Physics2D.BoxCast(origin, size, 0f, Vector2.down, MoveStats.GroundDetectionRayLength, MoveStats.GroundLayer);
+		_isGrounded = _groundHit.collider != null;
 	}
 
 	private void BumpedHead()
 	{
-		Vector2 boxCastOrigin = new Vector2(_feetColl.bounds.center.x, _bodyColl.bounds.max.y);
-		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x * MoveStats.HeadWidth, MoveStats.HeadDetectionRayLength);
+		Vector2 origin = new Vector2(_feetColl.bounds.center.x, _bodyColl.bounds.max.y);
+		Vector2 size = new Vector2(_feetColl.bounds.size.x * MoveStats.HeadWidth, MoveStats.HeadDetectionRayLength);
 
-		_headHit = Physics2D.BoxCast(boxCastOrigin, boxCastSize, 0f, Vector2.up, MoveStats.HeadDetectionRayLength, MoveStats.GroundLayer);
-		if (_headHit.collider != null)
-		{
-			_bumpedHead = true;
-		}
-
-		else
-		{
-			_bumpedHead = false;
-		}
+		_headHit = Physics2D.BoxCast(origin, size, 0f, Vector2.up, MoveStats.HeadDetectionRayLength, MoveStats.GroundLayer);
+		_bumpedHead = _headHit.collider != null;
 	}
 
 	private void WallCheck()
 	{
-		// Determine the direction to cast the ray based on which way the player is facing.
-		Vector2 castDirection = _isFacingRight ? Vector2.right : Vector2.left;
+		Vector2 forward = _isFacingRight ? Vector2.right : Vector2.left;
+		Vector2 back = _isFacingRight ? Vector2.left : Vector2.right;
 
-		// Raycast forward to detect a wall.
-		_wallHit = Physics2D.Raycast(transform.position, castDirection, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
+		_wallHit = Physics2D.Raycast(transform.position, forward, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
+		_wallHitBack = Physics2D.Raycast(transform.position, back, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
 
-		// Determine the opposite direction for the back raycast.
-		Vector2 backCastDirection = _isFacingRight ? Vector2.left : Vector2.right;
-
-		// Raycast backward to detect if the player has moved off the wall.
-		_wallHitBack = Physics2D.Raycast(transform.position, backCastDirection, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
-
-		// If we've hit a wall and are not grounded, we are wall sliding.
 		if (_wallHit.collider != null && !_isGrounded)
 		{
 			_isWallSliding = true;
-			// Reset the number of jumps when the player starts sliding on a wall.
-			_numberOfJumpsUsed = 0;
+			_numberOfJumpsUsed = 0; // reset on wall slide
 		}
 		else
 		{
@@ -550,7 +513,6 @@ public class PlayerMovement : MonoBehaviour
 			_isWallClinging = false;
 		}
 	}
-
 
 	private void CollisionChecks()
 	{
@@ -561,33 +523,26 @@ public class PlayerMovement : MonoBehaviour
 
 	#endregion
 
+
 	#region Timers
+
 	private void CountTimers()
 	{
 		_jumpBufferTimer -= Time.deltaTime;
 
+		// Coyote time
 		if (!_isGrounded)
-		{
 			_coyoteTimer -= Time.deltaTime;
-		}
-
 		else
-		{
 			_coyoteTimer = MoveStats.JumpCoyoteTime;
-		}
 
-		// Update the wall climb cooldown timer
+		// Wall climb cooldown
 		if (_wallClimbCooldownTimer > 0)
-		{
 			_wallClimbCooldownTimer -= Time.deltaTime;
-		}
 
-	        // Dash cooldown timer
-	        if (_dashCooldownTimer > 0)
-	        {
-	            _dashCooldownTimer -= Time.deltaTime;
-	        }
-
+		// Dash cooldown
+		if (_dashCooldownTimer > 0)
+			_dashCooldownTimer -= Time.deltaTime;
 	}
-	#endregion
 }
+#endregion
