@@ -42,5 +42,11 @@ public class EnemyDamage : MonoBehaviour
                 }
             }
         }
+         Debug.Log("Trigger entered with: " + other.name);
+
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player detected!");
+        }
     }
 }
