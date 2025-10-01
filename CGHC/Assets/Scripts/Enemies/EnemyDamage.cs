@@ -3,31 +3,42 @@ using UnityEngine;
 public class EnemyDamage : MonoBehaviour
 {
     [Header("Damage Settings")]
-    public float knockbackForce = 10f;
-    public bool dealsInstantKill = false; // Set this to false for enemies, true for death zones
+    public float knockbackForce = 15f;
+    public bool dealsInstantKill = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the collider is the player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.attachedRigidbody != null)
         {
+            // Get necessary components from the player's main GameObject
             PlayerHealth playerHealth = other.attachedRigidbody.GetComponent<PlayerHealth>();
+            PlayerMovement playerMovement = other.attachedRigidbody.GetComponent<PlayerMovement>();
             Rigidbody2D playerRB = other.attachedRigidbody;
 
             if (playerHealth != null)
             {
-                // 1. Deduct a life/handle death
                 playerHealth.TakeDamage(dealsInstantKill);
 
-                // 2. Knockback the player (only for standard enemies)
-                if (playerRB != null && !dealsInstantKill)
+                // Only apply knockback if it's not an instant kill
+                if (!dealsInstantKill)
                 {
-                    // Calculate the direction away from the enemy
-                    Vector2 knockbackDirection = (other.transform.position - transform.position).normalized;
+                    if (playerRB != null && playerMovement != null)
+                    {
+                        // 1. Apply Knockback Force
+                        Vector2 knockbackDirection = (other.transform.position - transform.position).normalized;
+                        playerRB.linearVelocity = Vector2.zero;
+                        playerRB.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
 
-                    // Apply an impulse force
-                    playerRB.linearVelocity = Vector2.zero; // Stop current velocity first
-                    playerRB.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+                        // 2. ACTIVATE THE LOCK
+                        // Use the Invulnerability duration as the lock time
+                        playerMovement.ApplyKnockbackLock(playerHealth.invulnerabilityDuration);
+
+                        Debug.Log("KNOCKBACK APPLIED: Force = " + knockbackForce);
+                    }
+                    else
+                    {
+                        Debug.LogError("KNOCKBACK FAILED: PlayerMovement or Rigidbody is missing on Player.");
+                    }
                 }
             }
         }

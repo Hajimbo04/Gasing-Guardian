@@ -5328,12 +5328,8 @@ MonoBehaviour:
   MoveStats: {fileID: 11400000, guid: 021e726ceae1b364b9a8a6a46c2b2e49, type: 2}
   _feetColl: {fileID: 155089981}
   _bodyColl: {fileID: 681968896}
-  _animator: {fileID: 0}
   FacingDirectionGizmoLength: 1.5
   ShowFacingDirectionRay: 1
-  DashSpeed: 20
-  DashDuration: 0.2
-  DashCooldown: 0.5
   _isFacingRight: 0
 --- !u!114 &1091808765
 MonoBehaviour:
@@ -5363,6 +5359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLives: 3
+  invulnerabilityDuration: 0.5
 --- !u!1 &1099392222
 GameObject:
   m_ObjectHideFlags: 0
@@ -9013,6 +9010,7 @@ GameObject:
   - component: {fileID: 1628835586}
   - component: {fileID: 1628835585}
   - component: {fileID: 1628835584}
+  - component: {fileID: 1628835587}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -9047,7 +9045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a9d5442af233e4a86cb984ce32d495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackForce: 10
+  knockbackForce: 0.001
   dealsInstantKill: 0
 --- !u!58 &1628835585
 CircleCollider2D:
@@ -9140,6 +9138,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1628835587
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628835582}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1676304678
 GameObject:
   m_ObjectHideFlags: 0
