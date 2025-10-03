@@ -179,15 +179,18 @@ public class PlayerMovement : MonoBehaviour
 
 		// Get the current local scale
 		Vector2 localScale = transform.localScale;
+		
+    	float sizeX = Mathf.Abs(localScale.x);
+
 
 		// Flip the x-component of the scale
 		if (_isFacingRight)
 		{
-			localScale.x = 1f;
+			localScale.x = sizeX;
 		}
 		else
 		{
-			localScale.x = -1f;
+			localScale.x = -sizeX;
 		}
 
 		// Apply the new local scale
