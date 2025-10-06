@@ -22,6 +22,8 @@ public class PlayerAttack : MonoBehaviour
 
         GameObject indicatorGO = Instantiate(attackRangeIndicatorPrefab);
 
+        indicatorGO.transform.parent = transform;
+    
         AttackIndicator indicator = indicatorGO.GetComponent<AttackIndicator>();
 
         // If the component exists, set it up.
