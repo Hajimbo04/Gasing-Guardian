@@ -19,6 +19,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("PlayerHealth Start called");
+
         currentLives = maxLives;
 
         // Find Respawn Point

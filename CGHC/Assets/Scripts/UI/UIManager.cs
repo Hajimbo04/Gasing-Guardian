@@ -11,9 +11,23 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("UIManager Start called");
         // 1. Find the PlayerHealth script automatically.
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
+         if (playerObject == null)
+        {
+            Debug.LogError("No GameObject found with tag 'Player'!");
+        }
+        else
+        {
+            Debug.Log("Found Player GameObject: " + playerObject.name);
+            playerHealth = playerObject.GetComponent<PlayerHealth>();
+
+            if (playerHealth == null)
+                Debug.LogError("PlayerHealth script is missing on object: " + playerObject.name);
+        }
+        
         if (playerObject != null)
         {
             playerHealth = playerObject.GetComponent<PlayerHealth>();
