@@ -1,61 +1,40 @@
 using UnityEngine;
 using TMPro; // REQUIRED for TextMeshPro
 
+/// <summary>
+/// Manages the display of player lives.
+/// This script is designed to be called by the PlayerHealth component's UnityEvent.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("UI References")]
     [Tooltip("Drag your TextMeshProUGUI element for lives here.")]
     public TextMeshProUGUI LivesText;
 
-    private PlayerHealth playerHealth;
+    // We no longer need the private PlayerHealth reference!
 
     void Start()
     {
         Debug.Log("UIManager Start called");
-        // 1. Find the PlayerHealth script automatically.
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-
-         if (playerObject == null)
-        {
-            Debug.LogError("No GameObject found with tag 'Player'!");
-        }
-        else
-        {
-            Debug.Log("Found Player GameObject: " + playerObject.name);
-            playerHealth = playerObject.GetComponent<PlayerHealth>();
-
-            if (playerHealth == null)
-                Debug.LogError("PlayerHealth script is missing on object: " + playerObject.name);
-        }
-        
-        if (playerObject != null)
-        {
-            playerHealth = playerObject.GetComponent<PlayerHealth>();
-        }
-
-        if (playerHealth == null)
-        {
-            Debug.LogError("PlayerHealth component not found on the GameObject tagged 'Player'. UI will not update.");
-        }
 
         if (LivesText == null)
         {
-            Debug.LogError("LivesText (TextMeshProUGUI) is not assigned in the UIManager Inspector!");
+            // We keep this check since the text reference is essential
+            Debug.LogError("LivesText (TextMeshProUGUI) is not assigned in the UIManager Inspector! UI will not update.");
         }
 
-        // 2. If components are found, set the initial text.
-        if (LivesText != null && playerHealth != null)
-        {
-            UpdateLivesDisplay(playerHealth.maxLives);
-        }
+        // Note: The initial display update is now handled by PlayerHealth.cs in its Start() method
+        // via the OnLivesChanged event, ensuring the value is correct even after persistence loading.
     }
 
     // Public method called by PlayerHealth whenever lives change
+    // This function will be linked via the Unity Inspector.
     public void UpdateLivesDisplay(int newLives)
     {
         if (LivesText != null)
         {
             LivesText.text = "Lives: " + newLives;
+            Debug.Log($"UI updated: Lives: {newLives}");
         }
     }
 }
