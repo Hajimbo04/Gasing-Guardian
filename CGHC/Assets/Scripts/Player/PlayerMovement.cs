@@ -17,15 +17,6 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Debug Gizmo")]
 	public bool ShowFacingDirectionRay;
 
-		// Dash variables
-		[Header("Dash")]
-		public float DashSpeed = 20f;
-		public float DashDuration = 0.2f;
-		public float DashCooldown = 0.5f;
-		private bool _isDashing;
-		private float _dashTimer;
-		private float _dashCooldownTimer;
-		private int _dashDirection; // 1 for right, -1 for left
 
 	//movement variables
 	private Vector2 _moveVelocity;
@@ -70,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
 	private float _wallClingTimer;
 	private float _wallClimbCooldownTimer;
 
+	// KNOCKBACK LOCK VARIABLES (NEW)
+	private bool _isKnockedBack;
+	private float _knockbackTimer;
+
+
 	private void Awake()
 	{
 		_isFacingRight = true;
@@ -80,25 +76,14 @@ public class PlayerMovement : MonoBehaviour
 	private void Update()
 	{
 		CountTimers();
-		JumpChecks();
-		WallCling();
 
-			// Dash input and logic
-			if (!_isDashing && _dashCooldownTimer <= 0)
-			{
-				// Dash on pressing F
-				if (Input.GetKeyDown(KeyCode.F))
-				{
-					// Only dash if moving left/right
-					if (InputManager.Movement.x != 0)
-					{
-						_isDashing = true;
-						_dashTimer = DashDuration;
-						_dashCooldownTimer = DashCooldown + DashDuration;
-						_dashDirection = InputManager.Movement.x > 0 ? 1 : -1;
-					}
-				}
-			}
+		// Prevent jump input while knocked back
+		if (!_isKnockedBack)
+		{
+			JumpChecks();
+		}
+
+		WallCling();
 
 		if (ShowFacingDirectionRay)
 		{
@@ -130,27 +115,20 @@ public class PlayerMovement : MonoBehaviour
 		WallClimb();
 		WallJump();
 
-		if (_isDashing)
+		// MOVEMENT LOCK: Skip Move() calls if knocked back
+		if (_isKnockedBack)
 		{
-				// Apply dash velocity
-				_rb.linearVelocity = new Vector2(_dashDirection * DashSpeed, 0f);
-				_dashTimer -= Time.fixedDeltaTime;
-				if (_dashTimer <= 0)
-				{
-					_isDashing = false;
-				}
-			}
-			else
-			{
-				if (_isGrounded || _isWallClinging)
-				{
-					Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
-				}
-				else
-				{
-					Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
-				}
-			}
+			return;
+		}
+
+		if (_isGrounded || _isWallClinging)
+		{
+			Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, InputManager.Movement);
+		}
+		else
+		{
+			Move(MoveStats.AirAcceleration, MoveStats.AirDeceleration, InputManager.Movement);
+		}
 	}
 
 	#region Movement
@@ -173,7 +151,15 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
+	// PUBLIC METHOD TO APPLY LOCK (NEW)
+	public void ApplyKnockbackLock(float duration)
+	{
+		_isKnockedBack = true;
+		_knockbackTimer = duration;
+	}
+
 	private void TurnCheck(Vector2 moveInput)
+	// ... (existing TurnCheck logic) ...
 	{
 		if (_isFacingRight && moveInput.x < 0)
 		{
@@ -187,20 +173,24 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void Turn(bool turnRight)
+	// ... (existing Turn logic) ...
 	{
 		_isFacingRight = turnRight;
 
 		// Get the current local scale
 		Vector2 localScale = transform.localScale;
+		
+    	float sizeX = Mathf.Abs(localScale.x);
+
 
 		// Flip the x-component of the scale
 		if (_isFacingRight)
 		{
-			localScale.x = 1f;
+			localScale.x = sizeX;
 		}
 		else
 		{
-			localScale.x = -1f;
+			localScale.x = -sizeX;
 		}
 
 		// Apply the new local scale
@@ -212,6 +202,7 @@ public class PlayerMovement : MonoBehaviour
 	#region Jump
 
 	private void JumpChecks()
+	// ... (existing JumpChecks logic) ...
 	{
 		//when we press jump
 		if (InputManager.JumpWasPressed)
@@ -284,10 +275,10 @@ public class PlayerMovement : MonoBehaviour
 
 			VerticalVelocity = Physics2D.gravity.y;
 		}
-
 	}
 
 	private void InitiateJump(int numberOfJumpsUsed)
+	// ... (existing InitiateJump logic) ...
 	{
 		if (!_isJumping)
 		{
@@ -299,6 +290,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void Jump()
+	// ... (existing Jump logic) ...
 	{
 		//apply gravity while jumping
 		if (_isJumping)
@@ -490,6 +482,7 @@ public class PlayerMovement : MonoBehaviour
 	#region Collision Checks 
 
 	private void IsGrounded()
+	// ... (existing IsGrounded logic) ...
 	{
 		Vector2 boxcastOrigin = new Vector2(_feetColl.bounds.center.x, _feetColl.bounds.min.y);
 		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x, MoveStats.GroundDetectionRayLength);
@@ -506,6 +499,7 @@ public class PlayerMovement : MonoBehaviour
 	}
 
 	private void BumpedHead()
+	// ... (existing BumpedHead logic) ...
 	{
 		Vector2 boxCastOrigin = new Vector2(_feetColl.bounds.center.x, _bodyColl.bounds.max.y);
 		Vector2 boxCastSize = new Vector2(_feetColl.bounds.size.x * MoveStats.HeadWidth, MoveStats.HeadDetectionRayLength);
@@ -582,11 +576,17 @@ public class PlayerMovement : MonoBehaviour
 			_wallClimbCooldownTimer -= Time.deltaTime;
 		}
 
-	        // Dash cooldown timer
-	        if (_dashCooldownTimer > 0)
-	        {
-	            _dashCooldownTimer -= Time.deltaTime;
-	        }
+		// KNOCKBACK TIMER COUNTDOWN (NEW)
+		if (_knockbackTimer > 0)
+		{
+			_knockbackTimer -= Time.deltaTime;
+		}
+		else if (_isKnockedBack)
+		{
+			_isKnockedBack = false;
+			// Reset horizontal velocity after knockback ends to prevent sliding
+			_rb.linearVelocity = new Vector2(0f, _rb.linearVelocity.y);
+		}
 
 	}
 	#endregion
