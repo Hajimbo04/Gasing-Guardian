@@ -42,23 +42,9 @@
         /// <param name="nextSceneName">The name of the scene to load next (e.g., "Level2").</param>
         public void TransitionToNextLevel(string nextSceneName)
         {
-            // 1. Find the player's health component in the current scene
-            // We assume the PlayerHealth script is on the player object
-            PlayerHealth playerHealthComponent = FindObjectOfType<PlayerHealth>();
-
-            if (playerHealthComponent != null)
-            {
-                // 2. Instruct the player component to save its current LIVES data into this manager
-                // The SaveLives method in PlayerHealth will now update the 'playerLives' property (int?)
-                playerHealthComponent.SaveLives();
-            }
-            else
-            {
-                Debug.LogError("Could not find PlayerHealth component to save data! Transitioning with old data.");
-            }
-
+           
             // 3. Load the next scene
-            SceneManager.LoadScene(nextSceneName);
+           UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
 
             // When the new scene loads, the new PlayerHealth script's Awake() method will read the saved data
             // from this GameData manager (which is still active).

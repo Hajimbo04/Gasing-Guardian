@@ -30,11 +30,20 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("PlayerHealth Awake called");
 
-        // 1. Initialize lives to max before attempting to load persistent data
-        currentLives = maxLives;
-
-        // 2. Load persistent data if available (must happen before Start)
-        LoadLives();
+        // **FIXED LOGIC:**
+        // 1. Prioritize loading persistent data. Check if it exists first.
+        if (GameData.Instance != null && GameData.Instance.playerLives.HasValue)
+        {
+            // If data exists, load it.
+            currentLives = Mathf.Clamp(GameData.Instance.playerLives.Value, 0, maxLives);
+            Debug.Log($"Loaded persistent lives: {currentLives}");
+        }
+        else
+        {
+            // 2. If no data exists (e.g., first time playing), THEN initialize to max lives.
+            currentLives = maxLives;
+            Debug.Log("No persistent lives data found. Starting with max lives.");
+        }
     }
 
     private void Start()
@@ -68,28 +77,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Checks the GameData singleton for previously saved lives and loads them.
-    /// </summary>
-    public void LoadLives()
-    {
-        if (GameData.Instance != null && GameData.Instance.playerLives.HasValue)
-        {
-            // Set current lives from the saved value, clamped to maxLives
-            currentLives = Mathf.Clamp(GameData.Instance.playerLives.Value, 0, maxLives);
-            Debug.Log($"Loaded persistent lives: {currentLives}");
-
-            // Invoke the event after loading to ensure the UI is correct immediately.
-            OnLivesChanged.Invoke(currentLives);
-        }
-        else
-        {
-            Debug.Log("No persistent lives data found. Starting with max lives.");
-        }
-    }
+    // The LoadLives() method is no longer needed as its logic is now in Awake().
 
     /// <summary>
-    /// Called by GameData when transitioning to a new level to store current lives.
+    /// Called when transitioning to a new level to store current lives.
+    /// This is called from the LevelGoal script.
     /// </summary>
     public void SaveLives()
     {
@@ -123,10 +115,8 @@ public class PlayerHealth : MonoBehaviour
         if (isInstantKill)
         {
             // PATH A: INSTANT KILL / DEATH ZONE
-            // Deduct the final life
             currentLives = 0;
 
-            // Teleport Player immediately on death zone hit
             if (respawnPoint != null)
             {
                 transform.position = respawnPoint.position;
@@ -137,20 +127,15 @@ public class PlayerHealth : MonoBehaviour
             // PATH B: STANDARD DAMAGE / ENEMY HIT
             currentLives--;
 
-            // Apply Invulnerability
             invulnerabilityTimer = invulnerabilityDuration;
             if (playerMovement != null)
             {
-                // Apply knockback lock, handled by the PlayerMovement script
                 playerMovement.ApplyKnockbackLock(invulnerabilityDuration);
             }
         }
 
-        // Clamp lives to prevent negative numbers (though currentLives-- handles most of it)
         currentLives = Mathf.Max(0, currentLives);
 
-        // --- CRITICAL FIX: INVOKE EVENT HERE after lives change ---
-        // This ensures the UI updates to 2, 1, 0 before the Game Over reset.
         OnLivesChanged.Invoke(currentLives);
 
         // 3. Handle Game Over
@@ -158,14 +143,10 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("!!! GAME OVER, resetting lives to max !!!");
 
-            // Reset to max lives (ready for next attempt)
             currentLives = maxLives;
 
-            // --- INVOKE EVENT HERE after reset ---
-            // This updates the UI back to 3
             OnLivesChanged.Invoke(currentLives);
 
-            // Ensure player respawns on Game Over
             if (respawnPoint != null)
             {
                 transform.position = respawnPoint.position;
