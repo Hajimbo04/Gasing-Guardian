@@ -12,6 +12,11 @@ public class EnemyDamage : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.GetComponent<AttackIndicator>() != null)
+        {
+            return;
+        }
+
         // Debugging log to confirm collision is firing
         Debug.Log("Trigger entered with: " + other.name);
 

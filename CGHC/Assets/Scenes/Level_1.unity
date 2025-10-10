@@ -1695,11 +1695,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1032906868038459503, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1032906868038459503, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 1081865214014058807, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_IsTrigger
@@ -1739,11 +1739,11 @@ PrefabInstance:
       objectReference: {fileID: 1213393711}
     - target: {fileID: 7374081605831129944, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7430899007002990140, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8067640884250637625, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: knockbackForce
@@ -1755,7 +1755,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8084748772707312971, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8084748772707312971, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_IsActive
@@ -1763,7 +1763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282318161905648659, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8282318161905648659, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_IsActive
@@ -1771,11 +1771,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8862336862469822694, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8975457609552389401, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 9161511920536263917, guid: e1bf42f82bb79e546af69b5c9c3c30c8, type: 3}
       propertyPath: bulletPrefab
