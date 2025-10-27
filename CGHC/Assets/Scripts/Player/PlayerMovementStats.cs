@@ -13,13 +13,11 @@ public class PlayerMovementStats : ScriptableObject
     [Range(0.25f, 50f)] public float AirAcceleration = 5f;
     [Range(0.25f, 50f)] public float AirDeceleration = 5f;
 
-
     [Header("Grounded/Collision Checks")]
     public LayerMask GroundLayer;
     public float GroundDetectionRayLength = 0.02f;
     public float HeadDetectionRayLength = 0.02f;
     [Range(0f, 1f)] public float HeadWidth = 0.75f;
-
 
     [Header("Jump")]
     public float JumpHeight = 6.5f;
@@ -42,14 +40,19 @@ public class PlayerMovementStats : ScriptableObject
     [Header("Jump Coyote Time")]
     [Range(0f, 1f)] public float JumpCoyoteTime = 0.1f;
 
-    [Header("Wall")]
+    [Header("Wall Movement")]
     public LayerMask WallLayer;
     public float WallDetectionRayLength = 0.5f;
-    public float WallClimbSpeed = 3f;
-    public float WallClingTime = 1f;
-    public float WallJumpForce = 15f;
-    public float WallJumpVerticalForce = 10f;
-    [Range(0f, 3f)] public float WallClimbTimeLimit = 1f;
+    public float WallSlideSpeed = 2f;
+    public float WallStickTime = 0.2f; // The "stop" time you wanted
+    public Vector2 WallJumpForce = new Vector2(8f, 16f);
+    public float WallJumpKnockbackDuration = 0.15f; // How long to lock player control after wall jump
+    public float WallJumpCooldown = 0.25f; // <-- ADD THIS LINE
+
+    [Header("Dash")]
+    public float DashSpeed = 30f;
+    public float DashDuration = 0.15f;
+    public float DashCooldown = 0.5f;
 
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;

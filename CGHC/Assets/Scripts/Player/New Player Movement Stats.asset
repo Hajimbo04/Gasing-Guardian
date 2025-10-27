@@ -31,18 +31,21 @@ MonoBehaviour:
   NumberOfJumpsAllowed: 1
   TimeForUpwardsCancel: 0.034
   ApexThreshold: 0.974
-  ApexHangTime: 0.563
-  JumpBufferTime: 0.564
+  ApexHangTime: 0.1
+  JumpBufferTime: 0.1
   JumpCoyoteTime: 0.1
   WallLayer:
     serializedVersion: 2
     m_Bits: 256
-  WallDetectionRayLength: 1
-  WallClimbSpeed: 3
-  WallClingTime: 1
-  WallJumpForce: 15
-  WallJumpVerticalForce: 10
-  WallClimbTimeLimit: 1
+  WallDetectionRayLength: 0.05
+  WallSlideSpeed: 2
+  WallStickTime: 0.2
+  WallJumpForce: {x: 16, y: 16}
+  WallJumpKnockbackDuration: 0.15
+  WallJumpCooldown: 0.25
+  DashSpeed: 30
+  DashDuration: 0.15
+  DashCooldown: 2
   DebugShowIsGroundedBox: 0
   DebugShowHeadBumpBox: 0
   ShowWalkJumpArc: 1
