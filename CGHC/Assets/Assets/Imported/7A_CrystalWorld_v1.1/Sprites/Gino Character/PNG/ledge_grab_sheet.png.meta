@@ -273,7 +273,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ledge_grab_sheet_0: 5678318089757012065
+      ledge_grab_sheet_1: 1661739795881545509
+      ledge_grab_sheet_2: -5284692263291036225
+      ledge_grab_sheet_3: 5212980401643971997
+      ledge_grab_sheet_4: -4301507985049987875
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      diamond_big_04_0: 551926366097950882
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

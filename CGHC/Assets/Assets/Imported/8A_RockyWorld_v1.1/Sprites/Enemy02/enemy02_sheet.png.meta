@@ -898,7 +898,37 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      enemy02_sheet_0: 5048254707774744959
+      enemy02_sheet_1: -4290705813819789874
+      enemy02_sheet_10: -1187959100436517375
+      enemy02_sheet_11: -6155996147860945415
+      enemy02_sheet_12: 255134167607379365
+      enemy02_sheet_13: 1303740977030341724
+      enemy02_sheet_14: -7718256452299016479
+      enemy02_sheet_15: 9147756000632295740
+      enemy02_sheet_16: 3780742123941250562
+      enemy02_sheet_17: -8816899953673987821
+      enemy02_sheet_18: -5265517161767350442
+      enemy02_sheet_19: 3163165996457515392
+      enemy02_sheet_2: -6662006942414243324
+      enemy02_sheet_20: 6247925629206272827
+      enemy02_sheet_21: -947224003124193534
+      enemy02_sheet_22: 2905832727904716379
+      enemy02_sheet_23: 8320703835450866987
+      enemy02_sheet_24: -4521142248110547792
+      enemy02_sheet_25: -1035960959919659584
+      enemy02_sheet_26: 2785865430385683560
+      enemy02_sheet_27: -4078815700090702911
+      enemy02_sheet_28: 8244256442276492022
+      enemy02_sheet_29: 1912947354488226543
+      enemy02_sheet_3: -5575388251889137611
+      enemy02_sheet_4: 6778962592193039256
+      enemy02_sheet_5: 5254621885619196304
+      enemy02_sheet_6: 2421461482341072687
+      enemy02_sheet_7: -4565891226774953338
+      enemy02_sheet_8: -5025871569268365177
+      enemy02_sheet_9: 5671133167630737137
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

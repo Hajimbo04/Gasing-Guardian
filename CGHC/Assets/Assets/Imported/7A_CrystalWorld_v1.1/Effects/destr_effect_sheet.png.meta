@@ -1023,7 +1023,42 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      destr_effect_sheet_0: 1244111636114115387
+      destr_effect_sheet_1: -3386956362725957862
+      destr_effect_sheet_10: 2878178096915089042
+      destr_effect_sheet_11: -787899030342854027
+      destr_effect_sheet_12: 7956427741119255609
+      destr_effect_sheet_13: -1325879674565740284
+      destr_effect_sheet_14: -2280776294778968770
+      destr_effect_sheet_15: 8569188116927424931
+      destr_effect_sheet_16: 4131409991147467872
+      destr_effect_sheet_17: 4755994817338231535
+      destr_effect_sheet_18: 2112131535037980073
+      destr_effect_sheet_19: -8630020622908410051
+      destr_effect_sheet_2: 3095294794692659166
+      destr_effect_sheet_20: 1616668597181358990
+      destr_effect_sheet_21: -2050785791377544453
+      destr_effect_sheet_22: -8633362784989723484
+      destr_effect_sheet_23: -6773318697590523992
+      destr_effect_sheet_24: -3119547564862510724
+      destr_effect_sheet_25: 8419866824169621292
+      destr_effect_sheet_26: -390308120018351585
+      destr_effect_sheet_27: 8312774949073793003
+      destr_effect_sheet_28: 4324174907226416478
+      destr_effect_sheet_29: 4733118645643229148
+      destr_effect_sheet_3: 927042890381201896
+      destr_effect_sheet_30: -452122683889945875
+      destr_effect_sheet_31: -1713363951990838236
+      destr_effect_sheet_32: -1742224514675038905
+      destr_effect_sheet_33: -8800949619595055883
+      destr_effect_sheet_34: 6807457604358951714
+      destr_effect_sheet_4: 7205035598788698999
+      destr_effect_sheet_5: 4111254743169194219
+      destr_effect_sheet_6: 5252863014131645108
+      destr_effect_sheet_7: -6869111042255967075
+      destr_effect_sheet_8: -3866452974356166988
+      destr_effect_sheet_9: -7536584497349499729
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

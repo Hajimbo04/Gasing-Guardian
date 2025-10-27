@@ -323,7 +323,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      throw_attack_sheet_0: -9175975218260886218
+      throw_attack_sheet_1: 6145405192614593479
+      throw_attack_sheet_2: 6682263189998615716
+      throw_attack_sheet_3: -3856072473553423164
+      throw_attack_sheet_4: -6182659011846274052
+      throw_attack_sheet_5: -4484962573112742992
+      throw_attack_sheet_6: -6476548798831231338
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -648,7 +648,27 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      other_lev_build_0: -6407900570761989632
+      other_lev_build_1: 2859723527826273416
+      other_lev_build_10: 5057828150068656280
+      other_lev_build_11: 6763405321203979093
+      other_lev_build_12: -285041158339074988
+      other_lev_build_13: 432465092833590009
+      other_lev_build_14: -2167762186533696534
+      other_lev_build_15: 6442981333160207178
+      other_lev_build_16: -7325396126507888982
+      other_lev_build_17: -2315305009814365202
+      other_lev_build_18: 3888688114595632384
+      other_lev_build_19: 4010643674053485120
+      other_lev_build_2: -5436735433178123631
+      other_lev_build_3: -3330532752361973348
+      other_lev_build_4: -5625560842748525089
+      other_lev_build_5: 7500108293774917267
+      other_lev_build_6: -9089085011348808443
+      other_lev_build_7: -8779614703014576472
+      other_lev_build_8: -1244810096961397904
+      other_lev_build_9: -7926858129761737018
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -323,7 +323,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      destr_effect03_0: -4229837336376765527
+      destr_effect03_1: 2616470121814233671
+      destr_effect03_2: 2065160868933398212
+      destr_effect03_3: 3603027567268296642
+      destr_effect03_4: -7900238242291573208
+      destr_effect03_5: -2738839493513212216
+      destr_effect03_6: 6483236489771331703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
