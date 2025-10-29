@@ -1,19 +1,20 @@
-// using UnityEngine;
+using UnityEngine;
 
-// public class DeathZone : MonoBehaviour
-// {
-//     private void OnTriggerEnter2D(Collider2D other)
-//     {
-//         if (other.CompareTag("Player") && other.attachedRigidbody != null)
-//         {
-//             // Get the PlayerHealth script attached to the player's Rigidbody/main GameObject
-//             PlayerHealth playerHealth = other.attachedRigidbody.GetComponent<PlayerHealth>();
+public class DeathZone : MonoBehaviour
+{
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // 1. Check for the "Player" tag and a Rigidbody
+        if (other.CompareTag("Player") && other.attachedRigidbody != null)
+        {
+            // 2. Get the new HealthSystem script
+            HealthSystem playerHealth = other.attachedRigidbody.GetComponent<HealthSystem>();
 
-//             if (playerHealth != null)
-//             {
-//                 // Call TakeDamage(true) for an instant kill/respawn
-//                 playerHealth.TakeDamage(true);
-//             }
-//         }
-//     }
-// }
+            if (playerHealth != null)
+            {
+                // 3. Call the new instant death method
+                playerHealth.InstantKillOrRespawn();
+            }
+        }
+    }
+}

@@ -213,6 +213,26 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+public void InstantKillOrRespawn()
+{
+    // A. Check if the player is already dead to prevent repeated calls
+    if (currentLives <= 0)
+    {
+        return;
+    }
+
+    // B. Reduce lives to zero
+    currentLives = 0;
+
+    // C. Update UI
+    if (gameObject.CompareTag("Player"))
+    {
+        OnLivesChanged?.Invoke(currentLives);
+    }
+
+    // D. Trigger the death routine
+    Die();
+}
 
     private void Die()
     {
@@ -230,7 +250,7 @@ public class HealthSystem : MonoBehaviour
         {
             // --- THIS IS THE MODIFIED PART ---
             Debug.Log(gameObject.name + " has died.");
-            
+
             // 1. Check if the thing that died was an Enemy
             if (gameObject.CompareTag("Enemy"))
             {
