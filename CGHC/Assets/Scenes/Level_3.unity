@@ -178,6 +178,38 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
+      value: -101.38016
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
+      value: -73.87993
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
+      value: 16.344736
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
+      value: -73.765335
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].x
+      value: 106.439095
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[5].y
+      value: -73.89359
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[6].x
+      value: 105.920975
+      objectReference: {fileID: 0}
+    - target: {fileID: 1664050635079479713, guid: 76db3369854960b4fb49a071eab31120, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[6].y
+      value: 77.679794
+      objectReference: {fileID: 0}
     - target: {fileID: 5922401562001011365, guid: 76db3369854960b4fb49a071eab31120, type: 3}
       propertyPath: m_Name
       value: CameraBounds2DLevel3
@@ -1298,11 +1330,11 @@ PrefabInstance:
       objectReference: {fileID: 883010208}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.770912
+      value: -18.777403
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.0898323
+      value: -3.0898347
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.z
