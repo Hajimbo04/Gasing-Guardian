@@ -22550,8 +22550,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1200166392}
   - component: {fileID: 1200166391}
+  - component: {fileID: 1200166393}
   m_Layer: 7
-  m_Name: GameObject (1)
+  m_Name: Death zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22618,6 +22619,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &1200166393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200166390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef70c316f0bf0e441b0de6b7eb7612b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1213393710
 GameObject:
   m_ObjectHideFlags: 0
