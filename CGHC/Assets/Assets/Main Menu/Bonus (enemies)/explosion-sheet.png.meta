@@ -396,6 +396,45 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -2634,7 +2673,108 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      explosion-sheet_0: -3159673866105667864
+      explosion-sheet_1: -5783592337469667466
+      explosion-sheet_10: 2276599202456918172
+      explosion-sheet_100: -5220319338256654744
+      explosion-sheet_11: 8025062976682336534
+      explosion-sheet_12: 5742036123776736909
+      explosion-sheet_13: 3219122127093192760
+      explosion-sheet_14: -1835199952933886572
+      explosion-sheet_15: 6179836979170134246
+      explosion-sheet_16: -5187242592676033365
+      explosion-sheet_17: 5670524775275217410
+      explosion-sheet_18: 4866834750136147029
+      explosion-sheet_19: 7934632213079401294
+      explosion-sheet_2: -771882804961391267
+      explosion-sheet_20: 4800255424698554156
+      explosion-sheet_21: 5101788585878682285
+      explosion-sheet_22: 3439911069318066090
+      explosion-sheet_23: 8749043982304465144
+      explosion-sheet_24: -294325264357122725
+      explosion-sheet_25: 7468567165909074856
+      explosion-sheet_26: -4452036907897574106
+      explosion-sheet_27: 1395559623106021209
+      explosion-sheet_28: -8861965761456960832
+      explosion-sheet_29: -2564768595589341880
+      explosion-sheet_3: 4114572795059623184
+      explosion-sheet_30: -7876670194305579235
+      explosion-sheet_31: -7158459281400281800
+      explosion-sheet_32: -3042267412565130218
+      explosion-sheet_33: 5669992547086075605
+      explosion-sheet_34: -6415565501196471060
+      explosion-sheet_35: -150871304042304955
+      explosion-sheet_36: -5369200566108542763
+      explosion-sheet_37: -1608667253289001773
+      explosion-sheet_38: -1814512001718457419
+      explosion-sheet_39: -1071836390215236896
+      explosion-sheet_4: -162978082955788564
+      explosion-sheet_40: -6523200491151370140
+      explosion-sheet_41: -7934463161386869117
+      explosion-sheet_42: 7576946897472059011
+      explosion-sheet_43: 6138729117732817900
+      explosion-sheet_44: 3912091643272454613
+      explosion-sheet_45: 6137242873113361912
+      explosion-sheet_46: -4161407865933952300
+      explosion-sheet_47: 42679147188764536
+      explosion-sheet_48: 1475904902877426662
+      explosion-sheet_49: -2517424011400132798
+      explosion-sheet_5: 7320905423498099728
+      explosion-sheet_50: -4134685437296916224
+      explosion-sheet_51: -3782878776796664497
+      explosion-sheet_52: 1309565346217675668
+      explosion-sheet_53: 4027190454014364392
+      explosion-sheet_54: -5423124143145909104
+      explosion-sheet_55: -2673355910707234241
+      explosion-sheet_56: -7502996409225502834
+      explosion-sheet_57: 4772262748076184743
+      explosion-sheet_58: 6115091692308201691
+      explosion-sheet_59: -1312545395273642099
+      explosion-sheet_6: 4838553715045724119
+      explosion-sheet_60: -527973429559284301
+      explosion-sheet_61: -967754401502302477
+      explosion-sheet_62: 2408624140064561646
+      explosion-sheet_63: -9021737217953001116
+      explosion-sheet_64: -8049607934210322271
+      explosion-sheet_65: -4049000619695793307
+      explosion-sheet_66: 8382046164618162147
+      explosion-sheet_67: 8553022911408090714
+      explosion-sheet_68: 8018080928840447086
+      explosion-sheet_69: 7178280560566667994
+      explosion-sheet_7: -7207238286440129062
+      explosion-sheet_70: -8156458459554439656
+      explosion-sheet_71: 4500607455936639505
+      explosion-sheet_72: -6510433831163011671
+      explosion-sheet_73: -6949846716295937224
+      explosion-sheet_74: -3967854007678252537
+      explosion-sheet_75: -4333110659067755411
+      explosion-sheet_76: 947414171424788228
+      explosion-sheet_77: 3790252622979155180
+      explosion-sheet_78: 7363780746967591864
+      explosion-sheet_79: 1893869411268938682
+      explosion-sheet_8: 1950016865232214934
+      explosion-sheet_80: -6792805321333369528
+      explosion-sheet_81: 2624547104364953309
+      explosion-sheet_82: -5200352072581002715
+      explosion-sheet_83: -7301953470066922606
+      explosion-sheet_84: -5091090150065419910
+      explosion-sheet_85: -8494370603561434297
+      explosion-sheet_86: -2503069758004712460
+      explosion-sheet_87: -6084234530558587777
+      explosion-sheet_88: 4564853543617634851
+      explosion-sheet_89: -6426008485268265458
+      explosion-sheet_9: 2389317009176831701
+      explosion-sheet_90: -2803527184743480725
+      explosion-sheet_91: 6307265801155218082
+      explosion-sheet_92: -5469249258976252863
+      explosion-sheet_93: -7486307946963205888
+      explosion-sheet_94: -509402061533949154
+      explosion-sheet_95: -1640857563455187838
+      explosion-sheet_96: 4337779792887730163
+      explosion-sheet_97: 1759024816071790772
+      explosion-sheet_98: -6811742822863144182
+      explosion-sheet_99: -5648960315347991389
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
