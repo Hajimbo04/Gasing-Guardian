@@ -852,6 +852,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelClearManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1778832676570800315, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6209a3e243a5c5e4c8fd2af23b176656, type: 3}
     - target: {fileID: 1798235175165603053, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -880,6 +884,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2877283151665700724, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6209a3e243a5c5e4c8fd2af23b176656, type: 3}
     - target: {fileID: 3332485616886976085, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -984,6 +992,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GameOverMenu, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5814854499733751865, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6209a3e243a5c5e4c8fd2af23b176656, type: 3}
     - target: {fileID: 6136350285946727768, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
       propertyPath: m_text
       value: 'TIME : 0'
@@ -1036,10 +1048,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8280719078468626046, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6209a3e243a5c5e4c8fd2af23b176656, type: 3}
     - target: {fileID: 9059059433659963404, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9184355394110207501, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6209a3e243a5c5e4c8fd2af23b176656, type: 3}
     m_RemovedComponents:
     - {fileID: 7197516986643933539, guid: 5aa0654fa828a80409ed95ca5b8091f9, type: 3}
     m_RemovedGameObjects: []
