@@ -25292,7 +25292,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
       propertyPath: sceneToLoad
-      value: Level_2
+      value: Level_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
+      propertyPath: levelToUnlock
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
+      propertyPath: currentLevelNumber
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25313,11 +25321,11 @@ PrefabInstance:
       objectReference: {fileID: 883010208}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.583409
+      value: -11.571711
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.6853082
+      value: -3.6853185
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.z
