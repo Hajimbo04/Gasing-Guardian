@@ -34780,7 +34780,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
       propertyPath: sceneToLoad
-      value: Level_2
+      value: Ending_Scene
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
+      propertyPath: levelToUnlock
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
+      propertyPath: unlockNextLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608897841962910007, guid: f271cac3b659b994eabef700c14fe529, type: 3}
+      propertyPath: currentLevelNumber
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34801,11 +34813,11 @@ PrefabInstance:
       objectReference: {fileID: 883010208}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.415579
+      value: -19.419147
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.57003736
+      value: 0.52737
       objectReference: {fileID: 0}
     - target: {fileID: 2547393851087406055, guid: 43958f6e5418ccd48b3b109798951ea3, type: 3}
       propertyPath: m_LocalPosition.z
