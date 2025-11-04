@@ -8,6 +8,9 @@ public class Sound
 {
     public string name;
     public AudioClip clip;
+
+    [Range(0f, 2f)] // This makes a nice slider
+    public float volume = 1.0f; // Default to full volume
 }
 
 public class AudioManager : MonoBehaviour
@@ -25,11 +28,14 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The background music you want to play.")]
     public AudioClip backgroundMusic;
 
+    [Range(0f, 1f)]
+    public float musicVolume = 0.7f;
+
     [Tooltip("The list of all sound effects for the game.")]
     public Sound[] sfxList;
 
     // A Dictionary is a high-speed way to look up clips by their name.
-    private Dictionary<string, AudioClip> sfxMap;
+    private Dictionary<string, Sound> sfxMap;
 
     void Awake()
     {
@@ -48,10 +54,10 @@ public class AudioManager : MonoBehaviour
         // --- Build the SFX Dictionary ---
         // We turn the list into a fast-lookup Dictionary
         // so we can call sounds by their name string.
-        sfxMap = new Dictionary<string, AudioClip>();
+        sfxMap = new Dictionary<string, Sound>();
         foreach (Sound s in sfxList)
         {
-            sfxMap[s.name] = s.clip;
+            sfxMap[s.name] = s;
         }
 
         // --- Setup and Play Music ---
@@ -59,6 +65,7 @@ public class AudioManager : MonoBehaviour
         {
             musicSource.clip = backgroundMusic;
             musicSource.loop = true;
+            musicSource.volume = musicVolume;
             musicSource.Play();
         }
     }
@@ -70,11 +77,11 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(string soundName)
     {
         // Find the clip from the dictionary
-        if (sfxMap.TryGetValue(soundName, out AudioClip clip))
+        if (sfxMap.TryGetValue(soundName, out Sound soundToPlay))
         {
             // Play it as a "one-shot" sound. This allows multiple
             // sounds to play at once without cutting each other off.
-            sfxSource.PlayOneShot(clip);
+            sfxSource.PlayOneShot(soundToPlay.clip, soundToPlay.volume);
         }
         else
         {
