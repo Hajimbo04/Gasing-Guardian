@@ -156,6 +156,11 @@ public class HealthSystem : MonoBehaviour
         // 3. Apply damage
         currentLives -= damageAmount;
 
+        if (gameObject.CompareTag("Enemy"))
+        {
+            AudioManager.Instance.PlaySFX("Enemy Hurt");
+        }
+
         // 4. Update UI
         if (gameObject.CompareTag("Player"))
         {
@@ -250,6 +255,8 @@ public void InstantKillOrRespawn()
         {
             // --- THIS IS THE MODIFIED PART ---
             Debug.Log(gameObject.name + " has died.");
+
+            AudioManager.Instance.PlaySFX("Enemy Death");
 
             // 1. Check if the thing that died was an Enemy
             if (gameObject.CompareTag("Enemy"))

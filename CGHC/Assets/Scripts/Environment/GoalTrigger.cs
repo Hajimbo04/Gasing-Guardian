@@ -17,6 +17,7 @@ private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
+            AudioManager.Instance.PlaySFX("Reach Goal");
             // 1. Stop the timer
             LevelTimer.Instance.StopTimer();
             float finalTime = LevelTimer.Instance.CurrentTime;

@@ -64,6 +64,12 @@ public class GasingProjectile : MonoBehaviour
             return;
         }
 
+       
+        if (other.CompareTag("Ground"))
+        {
+            AudioManager.Instance.PlaySFX("Ground Bullet Hit");
+        }
+
         if (impactEffectPrefab != null)
         {
             Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);

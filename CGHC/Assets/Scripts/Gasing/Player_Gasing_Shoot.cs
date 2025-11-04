@@ -106,13 +106,17 @@ public class Player_Gasing_Shoot : MonoBehaviour
     {
         Vector2 shootDirection = isFacingRight ? Vector2.right : Vector2.left;
         GameObject gasing = Instantiate(gasingAnginPrefab, firePoint.position, firePoint.rotation);
-        
+
+        AudioManager.Instance.PlaySFX("Player Shoot (Wind)");
+
         SetupProjectileSorting(gasing); 
         gasing.GetComponent<GasingProjectile>().Launch(shootDirection);
     }
 
     void ShootApi()
     {
+        AudioManager.Instance.PlaySFX("Player Shoot (Fire)");
+
         Vector2 baseDirection = isFacingRight ? Vector2.right : Vector2.left;
         for (int i = 0; i < apiProjectileCount; i++)
         {
@@ -150,7 +154,9 @@ public class Player_Gasing_Shoot : MonoBehaviour
         }
 
         GameObject gasing = Instantiate(gasingTanahPrefab, firePoint.position, firePoint.rotation);
-        
+
+        AudioManager.Instance.PlaySFX("Player Shoot (Ground)");
+
         SetupProjectileSorting(gasing);
         
         gasing.GetComponent<GasingProjectile>().Launch(shootDirection);

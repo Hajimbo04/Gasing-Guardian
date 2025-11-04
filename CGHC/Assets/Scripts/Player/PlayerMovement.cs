@@ -257,12 +257,14 @@ public class PlayerMovement : MonoBehaviour
     }
     public void TriggerHurtAnimation()
     {
+        AudioManager.Instance.PlaySFX("Player Hurt");
         if (_anim == null) return;
         _anim.SetTrigger(_hurtHash);
     }
 
     public void TriggerDeathAnimation()
     {
+        AudioManager.Instance.PlaySFX("Player Death");
         if (_anim == null) return;
         _anim.SetTrigger(_deathHash);
     }
@@ -382,6 +384,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void InitiateJump(int numberOfJumpsUsed)
     {
+        AudioManager.Instance.PlaySFX("Player Jump");
         if (!_isJumping)
         {
             _isJumping = true;
@@ -572,7 +575,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private void InitiateDash()
 	{
-		_isDashing = true;
+        AudioManager.Instance.PlaySFX("Player Dash");
+        _isDashing = true;
 		_dashTimer = MoveStats.DashDuration;
 		_dashCooldownTimer = MoveStats.DashCooldown;
 		
@@ -590,12 +594,17 @@ public class PlayerMovement : MonoBehaviour
 		_isFastFalling = false;
 	}
 
-	#endregion
+    #endregion
 
-	#region Collision & Timers
-	// -----------------------------------------------------------------------------------
+    public void PlayFootstepSFX()
+    {
+        AudioManager.Instance.PlaySFX("Player Footstep");
+    }
 
-	private void CollisionChecks()
+    #region Collision & Timers
+    // -----------------------------------------------------------------------------------
+
+    private void CollisionChecks()
 	{
 		IsGrounded();
 		BumpedHead();
