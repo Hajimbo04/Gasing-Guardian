@@ -7,7 +7,7 @@ public class DeathZone : MonoBehaviour
         // 1. Check for the "Player" tag and a Rigidbody
         if (other.CompareTag("Player") && other.attachedRigidbody != null)
         {
-            // 2. Get the new HealthSystem script
+            // 2. Get the HealthSystem script
             HealthSystem playerHealth = other.attachedRigidbody.GetComponent<HealthSystem>();
 
             if (playerHealth != null)

@@ -27,25 +27,21 @@ public class GasingProjectile : MonoBehaviour
         {
             Vector2 velocity = rb.linearVelocity;
             
-            // 1. Handle Horizontal Direction with Scale
+            // Handle Horizontal Direction with Scale
             if (velocity.x < -0.1f) // Moving left
             {
-                // Flip the sprite on the X-axis
-                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                 
-                // Calculate angle as if we were moving right (to keep it right-side up)
+                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                             
                 velocity.x *= -1; 
             }
-            else // Moving right
+            else 
             {
-                // Ensure sprite is facing right
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
 
-            // 2. Handle Vertical Angle with Rotation
-            // We now use the (potentially modified) velocity to get the angle.
-            // If we were moving left, velocity.x is now positive, so Atan2
-            // will give a correct angle (e.g., 45 degrees instead of 135).
+            //Handle Vertical Angle with Rotation
+        
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
