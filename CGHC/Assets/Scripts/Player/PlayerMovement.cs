@@ -83,29 +83,27 @@ public class PlayerMovement : MonoBehaviour
     
     
     //#region Unity Lifecycle
-    // -----------------------------------------------------------------------------------
+ 
     
     private void Awake()
     {
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
-    // --- ADD THIS BLOCK ---
-        // Get the Animator. Assumes it's on the same GameObject or a child.
+ 
         if (_anim == null) _anim = GetComponentInChildren<Animator>();
 
-        // Convert the string "isWalking" to a hash
         _isWalkingHash = Animator.StringToHash("isWalking");
-        _isJumpingHash = Animator.StringToHash("isJumping"); // <-- ADD THIS
-        _hurtHash = Animator.StringToHash("Hurt");     // <-- ADD THIS
-        _deathHash = Animator.StringToHash("Death");   // <-- ADD THIS
+        _isJumpingHash = Animator.StringToHash("isJumping");
+        _hurtHash = Animator.StringToHash("Hurt");
+        _deathHash = Animator.StringToHash("Death");
         _respawnHash = Animator.StringToHash("Respawn");
-        // --- END OF BLOCK ---
+      
     }
 
 	private void Update()
 	{
 		// Check for dash input. 
-		// You can replace this with your InputManager if you have one.
+
 		if (Input.GetKeyDown(KeyCode.F))
 		{
 			_dashWasPressed = true;
@@ -116,9 +114,9 @@ public class PlayerMovement : MonoBehaviour
 		if (!_isKnockedBack && !_isDead)
 		{
 			JumpChecks();
-			DashChecks(); // <-- ADD THIS
+			DashChecks();
 		}
-        HandleAnimations(); // <-- ADD THIS LINE
+        HandleAnimations();
 		DrawDebugRays();
 	}
 
@@ -126,24 +124,24 @@ public class PlayerMovement : MonoBehaviour
 	{
 		CollisionChecks();
 
-        if (!_isDashing && !_isGrappling && !_isDead) // <-- ADD THIS WRAPPER
+        if (!_isDashing && !_isGrappling && !_isDead)
         {
             HandleWallSlide();
             Jump(); // Handles jump gravity
         }
-        // --- ADD THIS NEW BLOCK ---
+
         else if (_isDead)
         {
             // Apply basic gravity so the player falls to the ground
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
             VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
         }
-        // --- END OF NEW BLOCK ---
+
 
 		// Determine movement input, locking it if dashing
 		Vector2 input = _isKnockedBack || _isWallSliding || _isDashing || _isGrappling || _isDead ? Vector2.zero : InputManager.Movement;
 		// Handle horizontal movement
-        // Handle horizontal movement
+   
 		if (!_isKnockedBack && !_isWallSliding && !_isDashing && !_isGrappling && !_isDead)
 		{
 			// This block now ONLY runs when no other state is active
@@ -162,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
 			_moveVelocity.x = 0;
 		}
 
-				// Apply all calculated velocities to the Rigidbody
+	
 		if (!_isGrappling)
 		{
 			_rb.linearVelocity = new Vector2(_moveVelocity.x, VerticalVelocity);
@@ -517,12 +515,12 @@ public class PlayerMovement : MonoBehaviour
 
             if (_wallStickTimer > 0)
             {
-                // --- "Stop" Phase ---
+                // stop
                 VerticalVelocity = 0;
             }
             else
             {
-                // --- "Slide" Phase ---
+                // slide
                 VerticalVelocity = -MoveStats.WallSlideSpeed;
             }
         }
