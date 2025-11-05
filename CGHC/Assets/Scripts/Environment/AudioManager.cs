@@ -1,21 +1,18 @@
 using UnityEngine;
-using System.Collections.Generic; // We need this for the Dictionary
+using System.Collections.Generic; 
 
-// This struct is a helper. It lets us create a nice-looking list
-// of named sound effects in the Inspector.
 [System.Serializable]
 public class Sound
 {
     public string name;
     public AudioClip clip;
 
-    [Range(0f, 2f)] // This makes a nice slider
-    public float volume = 1.0f; // Default to full volume
+    [Range(0f, 2f)]
+    public float volume = 1.0f;
 }
 
 public class AudioManager : MonoBehaviour
 {
-    // This 'Instance' part is the "Singleton" pattern.
     public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
@@ -34,12 +31,10 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The list of all sound effects for the game.")]
     public Sound[] sfxList;
 
-    // A Dictionary is a high-speed way to look up clips by their name.
     private Dictionary<string, Sound> sfxMap;
 
     void Awake()
     {
-        // --- Singleton Logic ---
         if (Instance == null)
         {
             Instance = this;
@@ -51,9 +46,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // --- Build the SFX Dictionary ---
-        // We turn the list into a fast-lookup Dictionary
-        // so we can call sounds by their name string.
         sfxMap = new Dictionary<string, Sound>();
         foreach (Sound s in sfxList)
         {
@@ -76,16 +68,12 @@ public class AudioManager : MonoBehaviour
     /// <param name="soundName">The name of the sound from the Sfx List.</param>
     public void PlaySFX(string soundName)
     {
-        // Find the clip from the dictionary
         if (sfxMap.TryGetValue(soundName, out Sound soundToPlay))
         {
-            // Play it as a "one-shot" sound. This allows multiple
-            // sounds to play at once without cutting each other off.
             sfxSource.PlayOneShot(soundToPlay.clip, soundToPlay.volume);
         }
         else
         {
-            // A small warning if you try to play a sound that doesn't exist
             Debug.LogWarning("AudioManager: SFX not found: " + soundName);
         }
     }

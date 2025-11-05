@@ -14,7 +14,7 @@ public class EnemyRangedAI : MonoBehaviour
     public LayerMask groundLayer;
     public Transform groundCheck;
     public Transform wallCheck;
-    public Transform ledgeCheck;    // <-- ADD THIS
+    public Transform ledgeCheck;   
     public float checkRadius = 0.1f;
 
     [Header("Combat Setup")]
@@ -30,8 +30,8 @@ public class EnemyRangedAI : MonoBehaviour
     private bool isStunned = false;
     private float stunTimer = 0f;
 
-    private bool isGrounded; // <-- ADD THIS
-    private bool isTouchingWall; // <-- ADD THIS
+    private bool isGrounded; 
+    private bool isTouchingWall; 
 
     private enum AIState
     {
@@ -46,7 +46,6 @@ public class EnemyRangedAI : MonoBehaviour
         health = GetComponent<HealthSystem>();
     }
 
-// This is in EnemyRangedAI.cs
     void FixedUpdate()
     {
         if (isStunned)
@@ -65,14 +64,12 @@ public class EnemyRangedAI : MonoBehaviour
             return;
         }
 
-        // This check is ONLY to stop "air-flipping"
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
         if (!isGrounded)
         {
-            return; // We are in the air, so do nothing.
+            return; 
         }
 
-        // All logic below this line ONLY runs if we are on the ground
         CheckForPlayer();
 
         switch (currentState)
@@ -105,7 +102,7 @@ public class EnemyRangedAI : MonoBehaviour
         }
         else
         {
-            if (currentState != AIState.Patrolling) // If we were chasing or attacking
+            if (currentState != AIState.Patrolling) 
             {
                 playerTransform = null;
                 currentState = AIState.Patrolling;
@@ -113,10 +110,8 @@ public class EnemyRangedAI : MonoBehaviour
         }
     }
 
-// This is in EnemyRangedAI.cs
     private void Patrol()
     {
-        // Now we do our ledge and wall checks inside Patrol
         bool isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, groundLayer);
         bool isNearLedge = !Physics2D.OverlapCircle(ledgeCheck.position, checkRadius, groundLayer);
 
@@ -208,7 +203,6 @@ public class EnemyRangedAI : MonoBehaviour
         isStunned = true;
         stunTimer = duration;
 
-        // Stop all horizontal movement immediately
         if(rb != null)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);

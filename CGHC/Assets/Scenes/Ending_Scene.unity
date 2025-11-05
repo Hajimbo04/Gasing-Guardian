@@ -2023,7 +2023,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The order had been restored to the world
+  m_text: Rise, Gasing Guardian.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d90106e2f8597a142aaaadfea4e014aa, type: 2}
   m_sharedMaterial: {fileID: -3798779878249829915, guid: d90106e2f8597a142aaaadfea4e014aa, type: 2}
@@ -5463,7 +5463,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: In the end, the corruption had been cleansed
+  m_text: The trial has been completed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d90106e2f8597a142aaaadfea4e014aa, type: 2}
   m_sharedMaterial: {fileID: -3798779878249829915, guid: d90106e2f8597a142aaaadfea4e014aa, type: 2}

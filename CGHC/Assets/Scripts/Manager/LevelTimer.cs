@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro; // Required for TextMeshPro
+using TMPro; 
 
 public class LevelTimer : MonoBehaviour
 {
@@ -12,12 +12,10 @@ public class LevelTimer : MonoBehaviour
     private float currentTime = 0f;
     private bool isRunning = false;
 
-    // Public property so other scripts can read the time
     public float CurrentTime => currentTime;
 
     void Awake()
     {
-        // Setup Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -25,11 +23,9 @@ public class LevelTimer : MonoBehaviour
         else
         {
             Instance = this;
-            // DontDestroyOnLoad is already on the parent Player object
         }
     }
 
-    // Subscribe to the sceneLoaded event
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -40,17 +36,15 @@ public class LevelTimer : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // This is called every time a new scene is loaded
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Check if the new scene is a level (and not the MainMenu)
         if (scene.name.StartsWith("Level_"))
         {
             StartTimer();
         }
         else
         {
-            StopTimer(); // Stop and hide timer in MainMenu
+            StopTimer(); 
             if (inGameTimerText != null)
             {
                 inGameTimerText.gameObject.SetActive(false);
@@ -64,10 +58,8 @@ public class LevelTimer : MonoBehaviour
         {
             currentTime += Time.deltaTime;
             
-            // Update the in-game UI
             if (inGameTimerText != null)
             {
-                // Mathf.FloorToInt rounds down to the nearest whole number
                 inGameTimerText.text = "TIME: " + Mathf.FloorToInt(currentTime);
             }
         }

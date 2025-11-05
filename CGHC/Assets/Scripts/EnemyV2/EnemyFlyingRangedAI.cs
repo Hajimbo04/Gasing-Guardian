@@ -1,11 +1,11 @@
 using UnityEngine;
-using System.Collections; // Required for Coroutines
+using System.Collections; 
 
 public class EnemyFlyingRangedAI : MonoBehaviour
 {
     [Header("AI Settings")]
     public float chaseSpeed = 3f;
-    public float flyingRadius = 10f; // How far (left/right) it can move from its start
+    public float flyingRadius = 10f; 
     
     [Header("AI Detection")]
     public float detectionRadius = 15f;
@@ -13,15 +13,14 @@ public class EnemyFlyingRangedAI : MonoBehaviour
     public LayerMask playerLayer;
 
     [Header("Combat Setup")]
-    public GameObject projectilePrefab; // e.g., BoneProjectile
+    public GameObject projectilePrefab; 
     public Transform firePoint;
     public float attackCooldown = 2f;
 
-    // --- Private Variables ---
     private Rigidbody2D rb;
     private HealthSystem health;
     private Transform playerTransform;
-    private Vector2 startPosition; // Its "home base" position
+    private Vector2 startPosition; 
 
     private AIState currentState = AIState.Idle;
     private bool isFacingRight = true;
@@ -42,9 +41,8 @@ public class EnemyFlyingRangedAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<HealthSystem>();
 
-        // --- Flying Enemy Setup ---
-        rb.gravityScale = 0; // Make it fly
-        startPosition = transform.position; // Remember its starting point
+        rb.gravityScale = 0; 
+        startPosition = transform.position; 
     }
 
     void FixedUpdate()
@@ -127,7 +125,6 @@ public class EnemyFlyingRangedAI : MonoBehaviour
             float moveDirection = Mathf.Sign(homeDistanceX);
             rb.linearVelocity = new Vector2(chaseSpeed * 0.5f * moveDirection, 0);
             
-            // Flip if needed
             if ((isFacingRight && moveDirection < 0) || (!isFacingRight && moveDirection > 0))
             {
                 Flip();
@@ -135,7 +132,6 @@ public class EnemyFlyingRangedAI : MonoBehaviour
         }
         else
         {
-            // We are home, just hover
             rb.linearVelocity = Vector2.zero;
         }
     }
@@ -156,20 +152,17 @@ public class EnemyFlyingRangedAI : MonoBehaviour
         // 4. Check if we are at the edge of our flyingRadius
         if (homeDistance >= flyingRadius)
         {
-            // We are at the edge. Are we trying to move *further* away?
             bool isMovingAway = (transform.position.x > startPosition.x && moveDirection > 0) || 
                                 (transform.position.x < startPosition.x && moveDirection < 0);
 
             if (isMovingAway)
             {
-                // Stop moving. We can't go further.
                 rb.linearVelocity = Vector2.zero;
                 return;
             }
-            // If we are not moving away, it means we are moving back *towards* home, which is allowed.
         }
         
-        // 5. If we are inside our radius (or moving back towards it), chase the player
+        // 5. If inside radius (or moving back towards it), chase the player
         rb.linearVelocity = new Vector2(chaseSpeed * moveDirection, 0);
     }
 
@@ -196,7 +189,7 @@ public class EnemyFlyingRangedAI : MonoBehaviour
     private void FireProjectile()
     {
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        BoneProjectile projectileScript = projectile.GetComponent<BoneProjectile>(); // Or your generic projectile script
+        BoneProjectile projectileScript = projectile.GetComponent<BoneProjectile>(); 
 
         if (projectileScript != null && playerTransform != null)
         {
@@ -232,12 +225,10 @@ public class EnemyFlyingRangedAI : MonoBehaviour
 
         if(rb != null)
         {
-            // We only stop horizontal velocity. Vertical knockback from HealthSystem is fine.
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
 
-    // This helps you see the detection and flying radiuses in the Scene view
     private void OnDrawGizmosSelected()
     {
         // Draw Detection Radius (green)

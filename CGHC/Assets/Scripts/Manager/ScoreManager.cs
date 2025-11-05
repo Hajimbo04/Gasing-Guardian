@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro; // Required for TextMeshPro
+using TMPro; 
 
 public class ScoreManager : MonoBehaviour
 {
@@ -14,12 +14,10 @@ public class ScoreManager : MonoBehaviour
 
     private int currentScore = 0;
     
-    // Public property so other scripts can read the score
     public int CurrentScore => currentScore;
 
     void Awake()
     {
-        // Setup Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -27,11 +25,9 @@ public class ScoreManager : MonoBehaviour
         else
         {
             Instance = this;
-            // DontDestroyOnLoad is already on the parent Player object
         }
     }
 
-    // Subscribe to the sceneLoaded event
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -42,17 +38,14 @@ public class ScoreManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // This is called every time a new scene is loaded
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Check if the new scene is a level (and not the MainMenu)
         if (scene.name.StartsWith("Level_"))
         {
             ResetScore();
         }
         else
         {
-            // Stop and hide score in MainMenu
             if (inGameScoreText != null)
             {
                 inGameScoreText.gameObject.SetActive(false);
@@ -60,7 +53,6 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    // Resets the score to 0 when a level starts/restarts
     public void ResetScore()
     {
         currentScore = 0;
@@ -72,7 +64,6 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    // This will be called by the HealthSystem
     public void AddScore()
     {
         currentScore += scorePerEnemy;

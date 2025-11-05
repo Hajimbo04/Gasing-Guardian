@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic; // Needed for the Gasing List
+using System.Collections.Generic; 
 
 public enum GasingType 
 { 
@@ -23,7 +23,6 @@ public class Player_Gasing_Shoot : MonoBehaviour
     public int apiProjectileCount = 3; 
     public float apiSpreadAmount = 0.3f; 
 
-    // Private variables
     private float nextFireTime = 0f;
     private bool isFacingRight = true;
     private GasingType currentGasingType = GasingType.Angin;

@@ -44,10 +44,10 @@ public class PlayerMovementStats : ScriptableObject
     public LayerMask WallLayer;
     public float WallDetectionRayLength = 0.5f;
     public float WallSlideSpeed = 2f;
-    public float WallStickTime = 0.2f; // The "stop" time you wanted
+    public float WallStickTime = 0.2f;
     public Vector2 WallJumpForce = new Vector2(8f, 16f);
-    public float WallJumpKnockbackDuration = 0.15f; // How long to lock player control after wall jump
-    public float WallJumpCooldown = 0.25f; // <-- ADD THIS LINE
+    public float WallJumpKnockbackDuration = 0.15f; 
+    public float WallJumpCooldown = 0.25f; 
 
     [Header("Dash")]
     public float DashSpeed = 30f;

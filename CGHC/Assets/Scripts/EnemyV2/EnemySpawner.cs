@@ -1,21 +1,18 @@
 using UnityEngine;
-using System.Collections; // Required for Coroutines
-using System.Collections.Generic; // Required for Lists
+using System.Collections; 
+using System.Collections.Generic; 
 
-// This is a small helper class. By marking it [System.Serializable],
-// we can see and edit it in the Unity Inspector.
 [System.Serializable]
 public class SpawnInstruction
 {
-    public GameObject enemyPrefab;  // The enemy (Zombie, Skeleton, etc.)
-    public Transform spawnPoint;    // The location to spawn at
-    public float spawnDelay;        // Delay (in seconds) *before* this enemy spawns
+    public GameObject enemyPrefab;  
+    public Transform spawnPoint;    
+    public float spawnDelay;        
 }
 
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    // We replace the single prefab/spawn point with a LIST of instructions
     public List<SpawnInstruction> spawnList;
     public bool spawnOnce = true;
 
@@ -31,9 +28,9 @@ public class EnemySpawner : MonoBehaviour
             Gizmos.DrawWireCube(transform.position + (Vector3)collider.offset, collider.size);
         }
 
-        // Draw a blue cube for EVERY spawn point in our list
+        // Draw a blue cube for  spawn point in list
         Gizmos.color = Color.blue;
-        if (spawnList != null) // Check if the list exists
+        if (spawnList != null) 
         {
             foreach (var instruction in spawnList)
             {
@@ -51,16 +48,13 @@ public class EnemySpawner : MonoBehaviour
         {
             if (spawnOnce && hasSpawned)
             {
-                return; // We've already spawned, so do nothing
+                return; 
             }
 
-            // Mark as spawned immediately to prevent re-triggering
             hasSpawned = true;
 
-            // Start the Coroutine to handle the wave
             StartCoroutine(SpawnWave());
 
-            // Disable the trigger if it's one-time-use
             if (spawnOnce)
             {
                 GetComponent<BoxCollider2D>().enabled = false;
@@ -68,23 +62,20 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    // This is the new Coroutine that spawns the wave
     private IEnumerator SpawnWave()
     {
-        // Loop through every instruction in our list
         foreach (var instruction in spawnList)
         {
             // 1. Check if this instruction has a delay
             if (instruction.spawnDelay > 0)
             {
-                // If yes, wait for that many seconds
                 yield return new WaitForSeconds(instruction.spawnDelay);
             }
 
             // 2. Check that the prefab and spawn point are valid
             if (instruction.enemyPrefab != null && instruction.spawnPoint != null)
             {
-                // 3. Spawn the enemy!
+                // 3. Spawn enemy
                 Instantiate(instruction.enemyPrefab, instruction.spawnPoint.position, instruction.spawnPoint.rotation);
             }
             else
@@ -92,7 +83,5 @@ public class EnemySpawner : MonoBehaviour
                 Debug.LogWarning("A spawn instruction is missing a prefab or spawn point!");
             }
         }
-        
-        // The Coroutine ends when the loop is finished
     }
 }

@@ -12,18 +12,15 @@ public class EnemyAI : MonoBehaviour
     public LayerMask groundLayer;
     public Transform groundCheck;
     public Transform wallCheck;
-    public Transform ledgeCheck;    // <-- ADD THIS
+    public Transform ledgeCheck;   
     public float checkRadius = 0.1f;
 
-    // --- NEW VARIABLES ---
     [Header("Melee Combat")]
-    public float attackRange = 1f;   // How close to get before attacking
-    public int attackDamage = 1;     // Damage dealt per attack
-    public float attackRate = 1.0f;  // How many seconds between attacks
-    private float nextAttackTime = 0f; // Timer for attack rate
-    // ----------------------
+    public float attackRange = 1f;   
+    public int attackDamage = 1;   
+    public float attackRate = 1.0f;  
+    private float nextAttackTime = 0f; 
 
-    // Private variables
     private Rigidbody2D rb;
     private HealthSystem health;
     private bool isFacingRight = true;
@@ -47,7 +44,6 @@ public class EnemyAI : MonoBehaviour
         health = GetComponent<HealthSystem>();
     }
 
-// This is in EnemyAI.cs
     void FixedUpdate()
     {
         if (isStunned)
@@ -66,14 +62,12 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        // This check is ONLY to stop "air-flipping"
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
         if (!isGrounded)
         {
-            return; // We are in the air, so do nothing.
+            return; 
         }
 
-        // All logic below this line ONLY runs if we are on the ground
         CheckForPlayer();
         
         switch (currentState)
@@ -99,7 +93,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            if (currentState == AIState.Chasing) // Only switch back if we *were* chasing
+            if (currentState == AIState.Chasing) 
             {
                 playerTransform = null;
                 currentState = AIState.Patrolling;
@@ -107,11 +101,8 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-// This is in EnemyAI.cs
-// This is in EnemyAI.cs
     private void Patrol()
     {
-        // Now we do our ledge and wall checks inside Patrol
         bool isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, groundLayer);
         bool isNearLedge = !Physics2D.OverlapCircle(ledgeCheck.position, checkRadius, groundLayer);
 
@@ -124,7 +115,6 @@ public class EnemyAI : MonoBehaviour
         rb.linearVelocity = new Vector2(patrolSpeed * moveDirection, rb.linearVelocity.y);
     }
 
-    // --- CHASE FUNCTION IS NOW UPDATED ---
     private void Chase()
     {
         if (playerTransform == null)
@@ -133,38 +123,27 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        // --- NEW ATTACK LOGIC ---
-        // Check distance to player
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
         if (distanceToPlayer <= attackRange)
         {
-            // 1. STOP MOVING
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             
-            // 2. FACE THE PLAYER
             FacePlayer();
 
-            // 3. TRY TO ATTACK (on cooldown)
             if (Time.time >= nextAttackTime)
             {
-                // Update timer
                 nextAttackTime = Time.time + attackRate;
                 
-                // Deal damage
                 HealthSystem playerHealth = playerTransform.GetComponent<HealthSystem>();
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(attackDamage, transform.position);
                 }
             }
-            // We are in attack range, so don't run the "move" logic below
             return; 
         }
-        // --- END OF NEW ATTACK LOGIC ---
 
-
-        // If we are NOT in attack range, keep chasing
         float moveDirection = (playerTransform.position.x > transform.position.x) ? 1f : -1f;
 
         if ((isFacingRight && moveDirection < 0) || (!isFacingRight && moveDirection > 0))
@@ -175,7 +154,6 @@ public class EnemyAI : MonoBehaviour
         rb.linearVelocity = new Vector2(chaseSpeed * moveDirection, rb.linearVelocity.y);
     }
 
-    // --- NEW HELPER FUNCTION ---
     private void FacePlayer()
     {
         if (playerTransform == null) return;
@@ -186,7 +164,6 @@ public class EnemyAI : MonoBehaviour
             Flip();
         }
     }
-    // --------------------------
 
     private void Flip()
     {
@@ -201,7 +178,6 @@ public class EnemyAI : MonoBehaviour
         isStunned = true;
         stunTimer = duration;
 
-        // Stop all horizontal movement immediately
         if(rb != null)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);

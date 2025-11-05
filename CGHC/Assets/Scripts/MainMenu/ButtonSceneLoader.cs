@@ -4,11 +4,9 @@ using UnityEngine.UI;
 
 public class ButtonSceneLoader : MonoBehaviour
 {
-    // This is the drag-and-drop custom asset!
     [Tooltip("Drag the Scene Reference ScriptableObject here.")]
     public SceneAssetReference targetScene;
 
-    // The method to call on button click
     public void LoadTargetScene()
     {
         if (targetScene == null)
@@ -25,12 +23,10 @@ public class ButtonSceneLoader : MonoBehaviour
             return;
         }
 
-        // Load the scene using the name from the ScriptableObject
         SceneManager.LoadScene(sceneName);
         Debug.Log("Loading scene: " + sceneName);
     }
 
-    // Optional: Auto-attach the click event in code (assuming this script is on the Button)
     private void Start()
     {
         Button button = GetComponent<Button>();

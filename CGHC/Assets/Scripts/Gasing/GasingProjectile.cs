@@ -27,8 +27,7 @@ public class GasingProjectile : MonoBehaviour
         {
             Vector2 velocity = rb.linearVelocity;
             
-            // Handle Horizontal Direction with Scale
-            if (velocity.x < -0.1f) // Moving left
+            if (velocity.x < -0.1f) 
             {
                 
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
@@ -40,7 +39,6 @@ public class GasingProjectile : MonoBehaviour
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
 
-            //Handle Vertical Angle with Rotation
         
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -94,7 +92,7 @@ public class GasingProjectile : MonoBehaviour
             }
 
             Destroy(gameObject);
-            return; // Stop running the rest of this function
+            return; 
         }
         
         Destroy(gameObject);

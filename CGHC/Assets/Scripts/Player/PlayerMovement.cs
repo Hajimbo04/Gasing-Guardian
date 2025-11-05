@@ -16,13 +16,13 @@ public class PlayerMovement : MonoBehaviour
 
     // --- Core Components ---
     private Rigidbody2D _rb;
-    private Animator _anim; // <-- ADD THIS
+    private Animator _anim; 
 
-    // --- Animation Hashes ---
-    private int _isWalkingHash; // <-- ADD THIS
-    private int _isJumpingHash; // <-- ADD THIS
-    private int _hurtHash;   // <-- ADD THIS
-    private int _deathHash;  // <-- ADD THIS
+    // --- Animation  ---
+    private int _isWalkingHash; 
+    private int _isJumpingHash; 
+    private int _hurtHash;  
+    private int _deathHash;  
     private int _respawnHash;
     
     // --- State Variables ---
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
 	// --- Dash State ---
 	private bool _isDashing;
-	public bool IsDashing => _isDashing; // <-- ADD THIS LINE
+	public bool IsDashing => _isDashing; 
 	private bool _dashWasPressed;
 	private float _dashTimer;
 	private float _dashCooldownTimer;
@@ -81,10 +81,6 @@ public class PlayerMovement : MonoBehaviour
     private float _wallStickTimer;
     private float _wallJumpCooldownTimer;
     
-    
-    //#region Unity Lifecycle
- 
-    
     private void Awake()
     {
         _isFacingRight = true;
@@ -97,13 +93,10 @@ public class PlayerMovement : MonoBehaviour
         _hurtHash = Animator.StringToHash("Hurt");
         _deathHash = Animator.StringToHash("Death");
         _respawnHash = Animator.StringToHash("Respawn");
-      
     }
 
 	private void Update()
 	{
-		// Check for dash input. 
-
 		if (Input.GetKeyDown(KeyCode.F))
 		{
 			_dashWasPressed = true;
@@ -123,28 +116,21 @@ public class PlayerMovement : MonoBehaviour
 	private void FixedUpdate()
 	{
 		CollisionChecks();
-
         if (!_isDashing && !_isGrappling && !_isDead)
         {
             HandleWallSlide();
-            Jump(); // Handles jump gravity
+            Jump(); 
         }
 
         else if (_isDead)
         {
-            // Apply basic gravity so the player falls to the ground
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
             VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
         }
 
-
-		// Determine movement input, locking it if dashing
 		Vector2 input = _isKnockedBack || _isWallSliding || _isDashing || _isGrappling || _isDead ? Vector2.zero : InputManager.Movement;
-		// Handle horizontal movement
-   
 		if (!_isKnockedBack && !_isWallSliding && !_isDashing && !_isGrappling && !_isDead)
 		{
-			// This block now ONLY runs when no other state is active
 			if (_isGrounded)
 			{
 				Move(MoveStats.GroundAcceleration, MoveStats.GroundDeceleration, input);
@@ -156,7 +142,6 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (_isWallSliding)
 		{
-			// Kill horizontal velocity when sticking or sliding
 			_moveVelocity.x = 0;
 		}
 
@@ -165,14 +150,9 @@ public class PlayerMovement : MonoBehaviour
 		{
 			_rb.linearVelocity = new Vector2(_moveVelocity.x, VerticalVelocity);
 		}
-		// When _isGrappling is true, the physics engine is in control!
-	}
-		
-    //#endregion
-    
+	}    
     
     #region Movement
-    // -----------------------------------------------------------------------------------
 
     private void Move(float acceleration, float deceleration, Vector2 moveInput)
     {
@@ -216,17 +196,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrappling)
         {
-            // Stop player movement and internal gravity when grapple starts
             _moveVelocity.x = 0;
             VerticalVelocity = 0;
         }
         else
         {
-            // We are done grappling. Sync internal state from Rigidbody
             VerticalVelocity = _rb.linearVelocity.y;
             _moveVelocity.x = _rb.linearVelocity.x;
-
-            // Reset state
             _isFalling = true;
             _isJumping = false;
         }
@@ -235,21 +211,14 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Animation
-    // -----------------------------------------------------------------------------------
 
     private void HandleAnimations()
     {
-        if (_anim == null) return; // Safety check
-        if (_isDead) return; // No animations if dead
+        if (_anim == null) return; 
+        if (_isDead) return; 
 
-        // Player is walking if:
-        // 1. They are on the ground
-        // 2. They are pressing left or right (InputManager.Movement.x)
-        // 3. They are not in an "override" state (like dashing, grappling, or knocked back)
         bool isWalking = _isGrounded && Mathf.Abs(InputManager.Movement.x) > 0.1f && !_isDashing && !_isGrappling && !_isKnockedBack;
-
         _anim.SetBool(_isWalkingHash, isWalking);
-        // Jumping logic
         _anim.SetBool(_isJumpingHash, _isJumping);
 
     }
@@ -272,12 +241,8 @@ public class PlayerMovement : MonoBehaviour
         if (_anim == null) return;
         _isDead = false;
         _anim.SetTrigger(_respawnHash);
-        
-        // --- THIS IS THE FIX ---
-        // Re-enable the colliders that were disabled on death
         if (_feetColl != null) _feetColl.enabled = true;
         if (_bodyColl != null) _bodyColl.enabled = true;
-        // --- END OF FIX ---
     }
 
     public void SetDead(bool isDead)
@@ -288,10 +253,6 @@ public class PlayerMovement : MonoBehaviour
     public void SetDeadState()
     {
         _isDead = true;
-
-        // --- THIS IS THE FIX ---
-        // Disable the colliders that hold the player up.
-        // This lets the sprite fall flat on the ground.
         if (_feetColl != null) _feetColl.enabled = false;
         if (_bodyColl != null) _bodyColl.enabled = false;
     }
@@ -299,18 +260,17 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Jump Logic
-    // -----------------------------------------------------------------------------------
 
     private void JumpChecks()
     {
-        // 1. Wall Jump has highest priority
+        // 1. Wall Jump 
         if (_jumpBufferTimer > 0f && _isWallSliding)
         {
             WallJump();
-            return; // Exit early, we did a wall jump
+            return; 
         }
 
-        // 2. Handle Jump Input
+        // 2. Jump Input
         if (InputManager.JumpWasPressed)
         {
             _jumpBufferTimer = MoveStats.JumpBufferTime;
@@ -324,7 +284,7 @@ public class PlayerMovement : MonoBehaviour
                 _jumpReleasedDuringBuffer = true;
             }
 
-            // Handle variable jump height
+            // variable jump height
             if (_isJumping && VerticalVelocity > 0f)
             {
                 if (_isPastApexThreshold)
@@ -359,7 +319,7 @@ public class PlayerMovement : MonoBehaviour
             _isFastFalling = false;
             InitiateJump(1);
         }
-        // 5. Air Jump (after falling off ledge, e.g. no coyote time)
+        // 5. Air Jump (after falling off ledge)
         else if (_jumpBufferTimer > 0f && _isFalling && _numberOfJumpsUsed < MoveStats.NumberOfJumpsAllowed)
         {
             InitiateJump(1);
@@ -388,15 +348,13 @@ public class PlayerMovement : MonoBehaviour
             _isJumping = true;
         }
         _jumpBufferTimer = 0f;
-        _coyoteTimer = 0f; // Consume coyote time on jump
+        _coyoteTimer = 0f; 
         _numberOfJumpsUsed += numberOfJumpsUsed;
         VerticalVelocity = MoveStats.InitialJumpVelocity;
     }
 
     private void Jump()
     {
-        // --- This method handles all Vertical Velocity changes (Gravity, Apex, etc.) ---
-        
         if (_isJumping)
         {
             if (_bumpedHead)
@@ -404,7 +362,6 @@ public class PlayerMovement : MonoBehaviour
                 _isFastFalling = true;
             }
 
-            // --- Apex Hang Logic ---
             if (VerticalVelocity >= 0f)
             {
                 _apexPoint = Mathf.InverseLerp(MoveStats.InitialJumpVelocity, 0f, VerticalVelocity);
@@ -422,17 +379,16 @@ public class PlayerMovement : MonoBehaviour
                         _timePastApexThreshold += Time.fixedDeltaTime;
                         if (_timePastApexThreshold < MoveStats.ApexHangTime)
                         {
-                            VerticalVelocity = 0f; // Hang at apex
+                            VerticalVelocity = 0f; 
                         }
                         else
                         {
-                            VerticalVelocity = -0.01f; // Start falling
+                            VerticalVelocity = -0.01f; 
                         }
                     }
                 }
                 else
                 {
-                    // Standard upward gravity
                     VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
                     if (_isPastApexThreshold)
                     {
@@ -440,15 +396,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
-            // --- Standard Falling Logic (after apex) ---
             else if (!_isFastFalling)
             {
-                // Gravity for holding jump (floatier)
                 VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime; 
             }
             else
             {
-                // This 'else' block runs when VerticalVelocity < 0f
                 if (!_isFalling)
                 {
                     _isFalling = true;
@@ -479,11 +432,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 _isFalling = true;
             }
-            // Apply standard gravity
             VerticalVelocity += MoveStats.Gravity * Time.fixedDeltaTime;
         }
         
-        // Clamp to max fall speed
         VerticalVelocity = Mathf.Clamp(VerticalVelocity, -MoveStats.MaxFallSpeed, 50f);
     }
     
@@ -491,64 +442,57 @@ public class PlayerMovement : MonoBehaviour
     
     
     #region Wall Movement
-    // -----------------------------------------------------------------------------------
     
     private void HandleWallSlide()
     {
         if (_wallJumpCooldownTimer > 0f) return;
         
-        // We check for input > 0.1f to avoid accidental slides
         bool isPushingIntoWall = (_isFacingRight && InputManager.Movement.x > 0.1f) || (!_isFacingRight && InputManager.Movement.x < -0.1f);
-        bool canWallSlide = _isWallDetected && !_isGrounded && isPushingIntoWall && VerticalVelocity < 0f; // Only slide if falling
+        bool canWallSlide = _isWallDetected && !_isGrounded && isPushingIntoWall && VerticalVelocity < 0f; 
 
         if (canWallSlide)
         {
-            if (!_isWallSliding) // Just started touching the wall
+            if (!_isWallSliding) 
             {
                 _isWallSliding = true;
-                _isJumping = false; // Cancel any existing jump
+                _isJumping = false; 
                 _isFalling = false;
                 _isFastFalling = false;
-                _numberOfJumpsUsed = 0; // Wall touch resets air jumps
-                _wallStickTimer = MoveStats.WallStickTime; // Start the 0.2s "stop" timer
+                _numberOfJumpsUsed = 0; 
+                _wallStickTimer = MoveStats.WallStickTime; 
             }
 
             if (_wallStickTimer > 0)
             {
-                // stop
                 VerticalVelocity = 0;
             }
             else
             {
-                // slide
                 VerticalVelocity = -MoveStats.WallSlideSpeed;
             }
         }
         else
         {
-            // No longer meeting conditions, stop sliding
             if (_isWallSliding)
             {
                 _isWallSliding = false;
-                _wallStickTimer = 0; // Reset timer
+                _wallStickTimer = 0; 
             }
         }
     }
 
     private void WallJump()
     {
-        // --- Execute the Wall Jump ---
         _isWallSliding = false;
         _isJumping = true;
         _isFalling = false;
         _isFastFalling = false;
-        _numberOfJumpsUsed = 1; // Use one jump
+        _numberOfJumpsUsed = 1; 
         _jumpBufferTimer = 0f;
         _coyoteTimer = 0f;
         _wallStickTimer = 0f;
         _wallJumpCooldownTimer = MoveStats.WallJumpCooldown;
         
-        // Turn *before* calculating force, so the force is applied in the new direction
         Turn(!_isFacingRight);
 
         float forceX = MoveStats.WallJumpForce.x * (_isFacingRight ? 1 : -1);
@@ -560,7 +504,6 @@ public class PlayerMovement : MonoBehaviour
 	#endregion
 
 	#region Dash
-	// -----------------------------------------------------------------------------------
 
 	private void DashChecks()
 	{
@@ -568,7 +511,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			InitiateDash();
 		}
-		_dashWasPressed = false; // Consume the input
+		_dashWasPressed = false; 
 	}
 
 	private void InitiateDash()
@@ -577,14 +520,8 @@ public class PlayerMovement : MonoBehaviour
         _isDashing = true;
 		_dashTimer = MoveStats.DashDuration;
 		_dashCooldownTimer = MoveStats.DashCooldown;
-		
-		// Set the dash velocity
 		_moveVelocity.x = MoveStats.DashSpeed * (_isFacingRight ? 1 : -1);
-		
-		// Stop all vertical movement
 		VerticalVelocity = 0f;
-		
-		// Cancel other states
 		_isJumping = false;
 		_isFalling = false;
 		_isWallSliding = false;
@@ -600,7 +537,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #region Collision & Timers
-    // -----------------------------------------------------------------------------------
 
     private void CollisionChecks()
 	{
@@ -631,7 +567,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 boxCastDirection = _isFacingRight ? Vector2.right : Vector2.left;
         Vector2 boxCastOrigin = _bodyColl.bounds.center;
-        Vector2 boxCastSize = new Vector2(_bodyColl.bounds.size.x, _bodyColl.bounds.size.y * 0.9f); // Make the box cast slightly shorter than the body collider
+        Vector2 boxCastSize = new Vector2(_bodyColl.bounds.size.x, _bodyColl.bounds.size.y * 0.9f); 
 
         _wallHit = Physics2D.BoxCast(boxCastOrigin, boxCastSize, 0f, boxCastDirection, MoveStats.WallDetectionRayLength, MoveStats.WallLayer);
         _isWallDetected = _wallHit.collider != null;
@@ -642,19 +578,15 @@ public class PlayerMovement : MonoBehaviour
         _jumpBufferTimer -= Time.deltaTime;
         _wallStickTimer -= Time.deltaTime;
 		_wallJumpCooldownTimer -= Time.deltaTime;
-		_dashCooldownTimer -= Time.deltaTime; // <-- ADD THIS
+		_dashCooldownTimer -= Time.deltaTime;
 
-		if (_dashTimer > 0) // <-- ADD THIS BLOCK
+		if (_dashTimer > 0) 
 		{
 			_dashTimer -= Time.deltaTime;
-			if (_dashTimer <= 0) // Dash just ended
+			if (_dashTimer <= 0) 
 			{
 				_isDashing = false;
-				_isFalling = true; // Let gravity take over immediately
-					
-				// Optional: You can set an end-dash speed here if you don't want
-				// the player to just stop dead.
-				// _moveVelocity.x *= 0.5f; 
+				_isFalling = true; 
 			}
 		}
 
@@ -681,25 +613,18 @@ public class PlayerMovement : MonoBehaviour
 
     
     #region Knockback
-    // -----------------------------------------------------------------------------------
-
     public void ApplyKnockback(Vector2 knockbackVelocity, float duration)
     {
         _isKnockedBack = true;
         _knockbackTimer = duration;
         _moveVelocity.x = knockbackVelocity.x;
         VerticalVelocity = knockbackVelocity.y;
-        
-        // This line was removed as it's redundant.
-        // _rb.linearVelocity is set manually in FixedUpdate() every frame.
-        // _rb.linearVelocity = knockbackVelocity; 
     }
     
     #endregion
     
     
     #region Gizmos
-    // -----------------------------------------------------------------------------------
     
     private void DrawDebugRays()
     {
@@ -712,15 +637,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Facing Direction
         Gizmos.color = Color.blue;
         Vector3 direction = _isFacingRight ? transform.right : -transform.right;
         Gizmos.DrawRay(transform.position, direction * FacingDirectionGizmoLength);
-        
-        // Note: You could also move your IsGrounded and WallCheck gizmo logic
-        // from PlayerMovementStats into here if you wanted them to draw
-        // dynamically based on the player's state.
     }
-    
     #endregion
 }

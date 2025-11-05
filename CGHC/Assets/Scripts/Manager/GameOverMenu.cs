@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class GameOverMenu : MonoBehaviour
 {
-    // This function will be hooked to the "Retry" button
+    // Retry button
     public void OnRetryClicked()
     {
         // 1. Unpause the game
@@ -13,7 +13,7 @@ public class GameOverMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // This function will be hooked to the "Main Menu" button
+    // Main Menu button
     public void OnMainMenuClicked()
     {
         // 1. Unpause the game

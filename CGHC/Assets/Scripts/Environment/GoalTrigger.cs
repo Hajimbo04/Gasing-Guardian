@@ -4,10 +4,10 @@ using UnityEngine.SceneManagement;
 public class GoalTrigger : MonoBehaviour
 {
     [Header("Level Info")]
-    public int currentLevelNumber = 1; // <-- ADD THIS. Set this in the Inspector! (e.g., 1 for Level 1)
+    public int currentLevelNumber = 1; 
 
     [Header("Scene Loading")]
-    public string sceneToLoad; // e.g., "Level_2"
+    public string sceneToLoad;
 
     [Header("Progress Saving")]
     public bool unlockNextLevel = true; 
@@ -22,10 +22,8 @@ private void OnTriggerEnter2D(Collider2D other)
             LevelTimer.Instance.StopTimer();
             float finalTime = LevelTimer.Instance.CurrentTime;
 
-            // --- NEW ---
             // 2. Get the final score
             int finalScore = ScoreManager.Instance.CurrentScore;
-            // ---------
 
             // 3. Save progress (Unlock next level)
             if (unlockNextLevel)
@@ -36,10 +34,8 @@ private void OnTriggerEnter2D(Collider2D other)
             // 4. Save the time
             GameProgress.SaveLevelTime(currentLevelNumber, finalTime);
             
-            // --- NEW ---
             // 5. Save the score
             GameProgress.SaveLevelScore(currentLevelNumber, finalScore);
-            // ---------
 
             // 6. Find the LevelClearManager
             LevelClearManager levelClearManager = FindFirstObjectByType<LevelClearManager>();
