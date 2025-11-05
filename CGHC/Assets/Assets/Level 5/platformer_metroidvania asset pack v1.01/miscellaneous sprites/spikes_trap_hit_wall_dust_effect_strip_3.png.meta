@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      spikes_trap_hit_wall_dust_effect_strip_3_0: 3153644365775355632
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

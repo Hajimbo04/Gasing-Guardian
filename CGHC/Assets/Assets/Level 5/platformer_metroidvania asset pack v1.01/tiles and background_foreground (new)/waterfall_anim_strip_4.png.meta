@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      waterfall_anim_strip_4_0: -5745253112252664404
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

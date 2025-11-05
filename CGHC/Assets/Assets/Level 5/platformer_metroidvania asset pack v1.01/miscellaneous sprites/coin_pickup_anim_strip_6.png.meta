@@ -248,7 +248,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      coin_pickup_anim_strip_6_0: -8085032188382512298
+      coin_pickup_anim_strip_6_1: -679227021632654480
+      coin_pickup_anim_strip_6_2: 2364531806408166509
+      coin_pickup_anim_strip_6_3: -4911090849469897614
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

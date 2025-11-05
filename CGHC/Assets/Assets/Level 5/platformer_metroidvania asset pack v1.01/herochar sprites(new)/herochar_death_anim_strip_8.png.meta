@@ -273,7 +273,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_death_anim_strip_8_0: -6722179839046455889
+      herochar_death_anim_strip_8_1: 280192431018165955
+      herochar_death_anim_strip_8_2: 4567056437294844318
+      herochar_death_anim_strip_8_3: 2677000151499843161
+      herochar_death_anim_strip_8_4: -4890499686423825532
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

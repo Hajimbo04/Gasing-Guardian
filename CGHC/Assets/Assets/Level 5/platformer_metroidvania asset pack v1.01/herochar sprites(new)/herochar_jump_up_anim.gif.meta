@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_jump_up_anim_0: -4880861452376144517
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_pushing_foward_anim_0: 5736082407858980079
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

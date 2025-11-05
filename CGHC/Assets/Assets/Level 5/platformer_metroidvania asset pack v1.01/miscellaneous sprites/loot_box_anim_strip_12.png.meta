@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      loot_box_anim_strip_12_0: 1136395886592153752
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

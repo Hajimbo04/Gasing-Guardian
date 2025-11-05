@@ -298,7 +298,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_pushing_foward_anim_strip_6_0: 6132292428745954916
+      herochar_pushing_foward_anim_strip_6_1: -5029878574216588443
+      herochar_pushing_foward_anim_strip_6_2: 4489941106753607224
+      herochar_pushing_foward_anim_strip_6_3: -2667392998417184212
+      herochar_pushing_foward_anim_strip_6_4: 6572300347838128206
+      herochar_pushing_foward_anim_strip_6_5: -634848888196504699
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      antidote_potion_0: 3543441121881144867
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

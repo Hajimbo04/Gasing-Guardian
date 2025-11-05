@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lever_turned_left_0: 5873487057516222031
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

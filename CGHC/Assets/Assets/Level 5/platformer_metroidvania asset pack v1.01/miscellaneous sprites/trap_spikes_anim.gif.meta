@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      trap_spikes_anim_0: -333082172460651084
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
