@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wood_slab_left_0: 8794561622166099552
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

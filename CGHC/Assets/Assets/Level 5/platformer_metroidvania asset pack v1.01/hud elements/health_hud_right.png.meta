@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      health_hud_right_0: 1179495437856976715
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

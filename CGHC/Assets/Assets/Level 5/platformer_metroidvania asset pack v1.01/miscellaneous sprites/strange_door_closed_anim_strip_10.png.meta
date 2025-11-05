@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      strange_door_closed_anim_strip_10_0: 3934809029133181444
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

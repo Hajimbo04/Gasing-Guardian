@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      strange_door_opening_anim_0: -3023013045433361387
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

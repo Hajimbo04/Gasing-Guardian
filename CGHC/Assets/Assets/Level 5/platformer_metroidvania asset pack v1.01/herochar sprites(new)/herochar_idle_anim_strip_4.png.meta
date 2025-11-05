@@ -248,7 +248,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_idle_anim_strip_4_0: -4099418257374492983
+      herochar_idle_anim_strip_4_1: 405284731805963245
+      herochar_idle_anim_strip_4_2: -1624975481447532243
+      herochar_idle_anim_strip_4_3: 7479925196342730779
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

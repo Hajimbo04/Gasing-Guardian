@@ -198,7 +198,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sword_effect_strip_4(new)_0: -1900035956748308934
+      sword_effect_strip_4(new)_1: -2674865830326373707
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_before_jump_dust_anim_strip_4_0: -431380083028963996
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

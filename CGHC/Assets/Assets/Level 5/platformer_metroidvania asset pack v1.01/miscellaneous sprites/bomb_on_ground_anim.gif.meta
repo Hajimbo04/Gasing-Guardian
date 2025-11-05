@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bomb_on_ground_anim_0: 472249902005972375
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

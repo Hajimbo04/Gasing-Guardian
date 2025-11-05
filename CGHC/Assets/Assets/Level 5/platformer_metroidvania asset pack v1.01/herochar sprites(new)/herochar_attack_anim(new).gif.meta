@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_attack_anim(new)_0: -2258884189821979114
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

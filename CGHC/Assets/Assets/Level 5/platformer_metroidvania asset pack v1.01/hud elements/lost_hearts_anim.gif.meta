@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lost_hearts_anim_0: -2609847547887468681
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

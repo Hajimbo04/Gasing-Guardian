@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vase_breaking_anim_0: -5311091798657824590
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
