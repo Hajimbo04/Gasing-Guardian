@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tiki_torch_props_0: 3003201801777855624
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

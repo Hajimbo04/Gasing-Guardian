@@ -198,7 +198,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_before_or_after_jump_srip_2_0: 1889270512273472843
+      herochar_before_or_after_jump_srip_2_1: 4068256804170631549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

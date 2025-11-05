@@ -198,7 +198,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hit_sparkle_anim_strip_4_0: 5702766072548976018
+      hit_sparkle_anim_strip_4_1: -3712070095467908123
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

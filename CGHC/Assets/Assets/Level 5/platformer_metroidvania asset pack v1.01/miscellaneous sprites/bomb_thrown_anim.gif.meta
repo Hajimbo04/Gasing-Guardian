@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bomb_thrown_anim_0: -6479529094060989373
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

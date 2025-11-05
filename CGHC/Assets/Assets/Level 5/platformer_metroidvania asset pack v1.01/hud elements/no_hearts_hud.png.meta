@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      no_hearts_hud_0: 8316700066395596444
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

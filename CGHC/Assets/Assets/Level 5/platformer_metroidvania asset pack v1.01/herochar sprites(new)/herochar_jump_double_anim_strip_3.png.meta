@@ -223,7 +223,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_jump_double_anim_strip_3_0: 4237889551830391601
+      herochar_jump_double_anim_strip_3_1: -1582698350390390843
+      herochar_jump_double_anim_strip_3_2: -4370406797760678395
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

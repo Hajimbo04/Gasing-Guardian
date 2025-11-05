@@ -223,7 +223,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      orb_collected_anim_strip_5_0: -8962346280235794574
+      orb_collected_anim_strip_5_1: -4927680323209895411
+      orb_collected_anim_strip_5_2: 4967983725468860517
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

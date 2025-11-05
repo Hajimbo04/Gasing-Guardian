@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      trap_suspended_anim_0: 6096265945601939313
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

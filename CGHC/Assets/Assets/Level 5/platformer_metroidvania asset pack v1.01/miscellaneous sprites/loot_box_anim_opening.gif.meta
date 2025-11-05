@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      loot_box_anim_opening_0: -297552007503384122
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

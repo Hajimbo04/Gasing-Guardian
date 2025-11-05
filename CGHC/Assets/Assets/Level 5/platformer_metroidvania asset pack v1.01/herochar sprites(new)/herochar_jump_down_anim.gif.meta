@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_jump_down_anim_0: 1586560499744861615
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

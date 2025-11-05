@@ -248,7 +248,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      herochar_attack_anim_strip_4(new)_0: -1962611370110631936
+      herochar_attack_anim_strip_4(new)_1: -8503097268077851110
+      herochar_attack_anim_strip_4(new)_2: 5035009283113203855
+      herochar_attack_anim_strip_4(new)_3: -3553089944127668758
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
