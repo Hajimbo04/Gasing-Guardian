@@ -1,4 +1,4 @@
-# Gasing Guardianl 🌀⚔️
+# Gasing Guardian 🌀⚔️
 
 A fast-paced 2D action platformer inspired by the classic *Mega Man X* series. The game blends tight platforming controls with strategic combat, featuring a unique projectile system based on the **Gasing**, a traditional Malaysian spinning top.
 
